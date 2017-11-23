@@ -41,7 +41,7 @@ Color Scene::trace(const Ray &ray)
 
     /****************************************************
     * This is where you should insert the color
-    * calculation (Phong model).
+    * calculation (Phong model).l
     *
     * Given: material, hit, N, V, lights[]
     * Sought: color
@@ -57,9 +57,26 @@ Color Scene::trace(const Ray &ray)
     *        pow(a,b)           a to the power of b
     ****************************************************/
 
-    Color color = material->color;                  // place holder
+	Vector L;
 
-    return color;
+	//ambiant member
+    Color ambiant = material->color * material->ka;                  // place holder
+
+	//difuse member
+	Color diffuse(0, 0, 0);
+	Color specular(0, 0, 0);
+	for(size_t i = 0 ; i < lights.size() ; i++)
+	{
+		L = (lights.at(i)->position - hit).normalized();
+
+		diffuse += L.dot(N) * (material->color + lights.at(i)->color);
+
+		specular += pow((2 * L.dot(N) * N - L).dot(V), material->n) * lights.at(i)->color;
+	}
+	diffuse *= material->kd;
+	specular *= material->ks;
+
+    return ambiant + diffuse /*+ specular*/;
 }
 
 void Scene::render(Image &img)

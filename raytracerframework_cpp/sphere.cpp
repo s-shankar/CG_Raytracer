@@ -45,7 +45,7 @@ Hit Sphere::intersect(const Ray &ray)
 	double cosAlpha = OCn.dot(ray.D); //here alpha is the angle formed by the vectors CO and D
 
 	/*case where the ray is directed behind the direction of the sphere*/
-    if (cosAlpha <= 0)
+    if (acos(cosAlpha) <= 0)
         return Hit::NO_HIT();
     
 	double OClength = OC.length();
@@ -80,11 +80,9 @@ Hit Sphere::intersect(const Ray &ray)
     * Insert calculation of the sphere's normal at the intersection point.
     ****************************************************/
 
-	//Plus qu'a ttrouver ce point et on a le vecteur normal
-	Point intersectionPoint = Point(0, 0, 0);
 
-
-    Vector N = (intersectionPoint - position).normalized();
+	Point intersectionPoint = ray.O + t*ray.D;
+    Vector N = -1 * (position - intersectionPoint) / r;
 
     return Hit(t,N);
 }
