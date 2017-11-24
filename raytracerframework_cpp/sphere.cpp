@@ -49,7 +49,7 @@ Hit Sphere::intersect(const Ray &ray)
         return Hit::NO_HIT();
     
 	double OClength = OC.length();
-	double sinBeta = r / OClength; //beta is the maximum angle alpha can have to touch the spere, where the ray is tangent of the sphere
+	double sinBeta = r / OClength; //beta is the maximum angle alpha can have to touch the spere, where the ray is tangent to the sphere
 
 	if(acos(cosAlpha) > asin(sinBeta))
 		return Hit::NO_HIT();
@@ -57,19 +57,24 @@ Hit Sphere::intersect(const Ray &ray)
 	//if we are here, we know the ray intersect the sphere
 	
 	/****************************************************
-	* calcules based on al - Kashi theorem
+	* calculations based on al-Kashi theorem
 	*
 	*     r²			= |OC|² + t² - 2 |OC| t cosAlpha
 	* <=> r² - |OC|²	= t² - 2 |OC| t cosAlpha
 	* <=> r² - |OC|²	= t² - 2 |OC| t cosAlpha
-	* cosAlpha = t / |OC|
-	* <=> r² - |OC|²	= t² - 2 |OC| t * (t / |OC|)
-	* <=> r² - |OC|²	= t² (1 - 2)
-	* <=> t²			= |OC|² - r²
-	*
-	* <=> t	= sqrt(|OC|² - r²)
+	* 
+
+
 	****************************************************/
-    double t = sqrt(OClength * OClength - r*r);
+	double t, b = -2 * OClength*cosAlpha;
+
+	double delta = b*b + 4 * (r*r - OClength*OClength);
+	
+	//just in case
+	if(delta < 0)
+		return Hit::NO_HIT();
+
+	t = (-b - sqrt(delta))/2;
 
     /****************************************************
     * RT1.2: NORMAL CALCULATION
@@ -81,7 +86,7 @@ Hit Sphere::intersect(const Ray &ray)
     ****************************************************/
 
 
-	Point intersectionPoint = ray.O + t*ray.D;
+	Point intersectionPoint = ray.at(t);
     Vector N = -1 * (position - intersectionPoint) / r;
 
     return Hit(t,N);
