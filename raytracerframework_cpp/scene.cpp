@@ -57,26 +57,30 @@ Color Scene::trace(const Ray &ray)
     *        pow(a,b)           a to the power of b
     ****************************************************/
 
-	Vector L;
+	Vector L, R;
 
 	//ambiant member
-    Color ambiant = material->color * material->ka;                  // place holder
+	double ambiant = material->ka;                  // place holder
 
-	//difuse member
-	Color diffuse(0, 0, 0);
-	Color specular(0, 0, 0);
-	for(size_t i = 0 ; i < lights.size() ; i++)
+	 //difuse and specular member
+	Color diffuse, specular;
+
+	for (size_t i = 0; i < lights.size(); i++)
 	{
 		L = (lights.at(i)->position - hit).normalized();
 
-		diffuse += L.dot(N) * (material->color + lights.at(i)->color);
+		if (L.dot(N) > 0)
+			diffuse += L.dot(N) * lights.at(i)->color;
 
-		specular += pow((2 * L.dot(N) * N - L).dot(V), material->n) * lights.at(i)->color;
+		R = (2 * L.dot(N) * N - L).normalized();
+
+		if (R.dot(V) > 0)
+			specular += pow(R.dot(V), material->n) * lights.at(i)->color;
 	}
-	diffuse *= material->kd;
+	diffuse *=  material->kd;
 	specular *= material->ks;
 
-    return ambiant + diffuse /*+ specular*/;
+	return (ambiant + diffuse) * material->color + specular;
 }
 
 void Scene::render(Image &img)
