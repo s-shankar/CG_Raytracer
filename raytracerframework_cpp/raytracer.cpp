@@ -1,3 +1,4 @@
+// Students : Tristan HERNANT - Shankar SIVAGNA
 //
 //  Framework for a raytracer
 //  File: raytracer.cpp

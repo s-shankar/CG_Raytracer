@@ -1,3 +1,4 @@
+// Students : Tristan HERNANT - Shankar SIVAGNA
 //
 //  Framework for a raytracer
 //  File: sphere.cpp
@@ -54,7 +55,7 @@ Hit Sphere::intersect(const Ray &ray)
 	if(acos(cosAlpha) > asin(sinBeta))
 		return Hit::NO_HIT();
 
-	//if we are here, we know the ray intersect the sphere
+	//if we are here, we know the ray intersects the sphere
 	
 	/****************************************************
 	* calculations based on al-Kashi theorem
@@ -63,11 +64,11 @@ Hit Sphere::intersect(const Ray &ray)
 	* <=> r² - |OC|²	= t² - 2 |OC| t cosAlpha
 	* <=> r² - |OC|²	= t² - 2 |OC| t cosAlpha
 
-	* here, we have an equation of the form a x² + b x + c = 0
-	* we calculate the discriminant dalta = b² - 4 a c
-	* if delta is negativ, the ray do not intersect the sphere which should not be appenning
-	* else, there is one solution for when the ray intersect but is tangent of the sphere (delta == 0)
-	* or two solutions when delta is positiv, in wich case we only accept the one which represent the first intersection of the ray and the sphere
+	* here, we have an equation of the form : a x² + b x + c = 0
+	* we calculate the discriminant delta = b² - 4 a c
+	* if delta is negative, the ray does not intersect the sphere which should not be happening
+	* else, there is one solution when the ray intersects but is tangent of the sphere (delta == 0)
+	* or two solutions when delta is positive, in which case we only accept the one which represents the first intersection of the ray and the sphere
 	****************************************************/
 	double t, b = -2 * OClength*cosAlpha;
 
