@@ -57,6 +57,8 @@ Color Scene::trace(const Ray &ray)
     *        pow(a,b)           a to the power of b
     ****************************************************/
 
+
+	/* Using Phong Shading formula */
 	Vector L, R;
 
 	//ambiant member
@@ -65,15 +67,28 @@ Color Scene::trace(const Ray &ray)
 	 //difuse and specular member
 	Color diffuse, specular;
 
+	/* For each Light Point, check if the Light Source
+		hits the Object.
+		Comparing with L, V, R and N vectors. Need to normalizes vectors, so that
+		their dot product gives the cosinus of their angle.
+		It will enable to compute the illumination thanks to
+		the colour the Light Point and the Object colour.
+
+		Assuming the intensity properties of the Object are all equal to 1.*/
 	for (size_t i = 0; i < lights.size(); i++)
 	{
+		/* Light vector given by the distance between
+		the Light Point and Object hit Point. */
 		L = (lights.at(i)->position - hit).normalized();
 
+		// diffusion  : (L.N)
 		if (L.dot(N) > 0)
 			diffuse += L.dot(N) * lights.at(i)->color;
 
+		// R = 2(N.L)N - L
 		R = (2 * L.dot(N) * N - L).normalized();
 
+		// specular : (R.V)^alpha
 		if (R.dot(V) > 0)
 			specular += pow(R.dot(V), material->n) * lights.at(i)->color;
 	}

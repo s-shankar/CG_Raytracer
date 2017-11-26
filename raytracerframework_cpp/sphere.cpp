@@ -49,7 +49,7 @@ Hit Sphere::intersect(const Ray &ray)
         return Hit::NO_HIT();
     
 	double OClength = OC.length();
-	double sinBeta = r / OClength; //beta is the maximum angle alpha can have to touch the spere, where the ray is tangent to the sphere
+	double sinBeta = r / OClength; //beta is the maximum angle alpha can have to touch the sphere, where the ray is tangent to the sphere
 
 	if(acos(cosAlpha) > asin(sinBeta))
 		return Hit::NO_HIT();
