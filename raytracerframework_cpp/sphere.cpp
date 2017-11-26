@@ -62,9 +62,12 @@ Hit Sphere::intersect(const Ray &ray)
 	*     r²			= |OC|² + t² - 2 |OC| t cosAlpha
 	* <=> r² - |OC|²	= t² - 2 |OC| t cosAlpha
 	* <=> r² - |OC|²	= t² - 2 |OC| t cosAlpha
-	* 
 
-
+	* here, we have an equation of the form a x² + b x + c = 0
+	* we calculate the discriminant dalta = b² - 4 a c
+	* if delta is negativ, the ray do not intersect the sphere which should not be appenning
+	* else, there is one solution for when the ray intersect but is tangent of the sphere (delta == 0)
+	* or two solutions when delta is positiv, in wich case we only accept the one which represent the first intersection of the ray and the sphere
 	****************************************************/
 	double t, b = -2 * OClength*cosAlpha;
 
