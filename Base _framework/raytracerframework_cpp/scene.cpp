@@ -1,4 +1,3 @@
-// Students : Tristan HERNANT - Shankar SIVAGNA
 //
 //  Framework for a raytracer
 //  File: scene.cpp
@@ -42,7 +41,7 @@ Color Scene::trace(const Ray &ray)
 
     /****************************************************
     * This is where you should insert the color
-    * calculation (Phong model).l
+    * calculation (Phong model).
     *
     * Given: material, hit, N, V, lights[]
     * Sought: color
@@ -58,51 +57,9 @@ Color Scene::trace(const Ray &ray)
     *        pow(a,b)           a to the power of b
     ****************************************************/
 
-	if(renderMode == RenderMode::phong)
-	{
-		/* Using Phong Shading formula */
-		Vector L, R;
+    Color color = material->color;                  // place holder
 
-		//ambiant member
-		double ambiant = material->ka;                  // place holder
-
-														//difuse and specular member
-		Color diffuse, specular;
-
-		/* For each Light Point, check if the Light Source
-		hits the Object.
-		Comparing with L, V, R and N vectors. Need to normalizes vectors, so that
-		their dot product gives the cosinus of their angle.
-		It will enable to compute the illumination thanks to
-		the colour the Light Point and the Object colour.
-
-		Assuming the intensity properties of the Object are all equal to 1.*/
-		for (size_t i = 0; i < lights.size(); i++)
-		{
-			/* Light vector given by the distance between
-			the Light Point and Object hit Point. */
-			L = (lights.at(i)->position - hit).normalized();
-
-			// diffusion  : (L.N)
-			if (L.dot(N) > 0)
-				diffuse += L.dot(N) * lights.at(i)->color;
-
-			// R = 2(N.L)N - L
-			R = (2 * L.dot(N) * N - L).normalized();
-
-			// specular : (R.V)^alpha
-			if (R.dot(V) > 0)
-				specular += pow(R.dot(V), material->n) * lights.at(i)->color;
-		}
-		diffuse *= material->kd;
-		specular *= material->ks;
-
-		return (ambiant + diffuse) * material->color + specular;
-	}
-
-	Color color = material->color;                  // place holder
-
-	return color;
+    return color;
 }
 
 void Scene::render(Image &img)
@@ -133,16 +90,4 @@ void Scene::addLight(Light *l)
 void Scene::setEye(Triple e)
 {
     eye = e;
-}
-
-void Scene::setRenderMode(string renderMode_)
-{
-	if(renderMode_ == "phong")
-		renderMode = phong;
-
-	if (renderMode_ == "zbuffer")
-		renderMode = zbuffer;
-
-	if (renderMode_ == "normal")
-		renderMode = normal;
 }

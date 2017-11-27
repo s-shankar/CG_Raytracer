@@ -1,4 +1,3 @@
-// Students : Tristan HERNANT - Shankar SIVAGNA
 //
 //  Framework for a raytracer
 //  File: raytracer.cpp
@@ -27,8 +26,6 @@
 // Functions to ease reading from YAML input
 void operator >> (const YAML::Node& node, Triple& t);
 Triple parseTriple(const YAML::Node& node);
-string parseString(const YAML::Node& node);
-
 
 void operator >> (const YAML::Node& node, Triple& t)
 {
@@ -45,13 +42,6 @@ Triple parseTriple(const YAML::Node& node)
     node[1] >> t.y;
     node[2] >> t.z;	
     return t;
-}
-
-string parseString(const YAML::Node& node)
-{
-	string res;
-	node >> res;
-	return res;
 }
 
 Material* Raytracer::parseMaterial(const YAML::Node& node)
@@ -117,9 +107,6 @@ bool Raytracer::readScene(const std::string& inputFilename)
         if (parser) {
             YAML::Node doc;
             parser.GetNextDocument(doc);
-
-			// Read render mode
-			scene->setRenderMode(parseString(doc["RenderMode"]));
 
             // Read scene configuration options
             scene->setEye(parseTriple(doc["Eye"]));
