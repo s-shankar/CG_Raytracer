@@ -100,9 +100,36 @@ Color Scene::trace(const Ray &ray)
 		return (ambiant + diffuse) * material->color + specular;
 	}
 
-	Color color = material->color;                  // place holder
+	if (renderMode == RenderMode::zbuffer)
+	{
+		double	farClippingPlane = 0, 
+				nearClippingPlane = /*eye.z*/ 450, 
+				maxDistance = nearClippingPlane - farClippingPlane,
+				distance/* = min_hit.t < 0 ?
+								0 : min_hit.t > nearClippingPlane ? 
+									nearClippingPlane : (nearClippingPlane - min_hit.t)*/;
 
-	return color;
+		distance = min_hit.t - (eye.z - nearClippingPlane);
+
+		if (distance < 0)
+			distance = 0;
+		else if (maxDistance - distance < farClippingPlane)
+			distance = maxDistance;
+		
+
+		Color color(0, 0, 0);
+		
+		color += 1 - (distance / maxDistance);
+
+		return color;
+	}
+
+	if (renderMode == RenderMode::normal)
+	{
+		return (N + Vector(1, 1, 1)) / 2;
+	}
+
+	return  material->color;
 }
 
 void Scene::render(Image &img)
