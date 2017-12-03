@@ -1,0 +1,17 @@
+RenderMode: "phong"
+
+Eye: [200,200,1000]  
+
+Lights:
+- position: [-200,600,1500]
+  color: [1.0,1.0,1.0]
+
+
+Objects:
+- type: "Box"
+  material :
+  	color: [1.0,0.0,0.0]
+  	ka: 0.2
+  	ks: 1.0
+  	kd: 0.5
+  	n: 32
