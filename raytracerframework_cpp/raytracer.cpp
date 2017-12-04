@@ -81,6 +81,15 @@ Object* Raytracer::parseObject(const YAML::Node& node)
         returnObject = sphere;
     }
 
+	if (objectType == "plane") {
+		Point p;
+		node["point"] >> p;
+		Vector n;
+		node["normal"] >> n;
+		Plane *plane = new Plane(p, n.normalized());
+		returnObject = plane;
+	}
+
 	else if (objectType == "box")
 	{
 		Point pos;
