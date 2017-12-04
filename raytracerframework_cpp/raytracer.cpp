@@ -16,6 +16,7 @@
 #include "raytracer.h"
 #include "object.h"
 #include "sphere.h"
+#include "box.h"
 #include "material.h"
 #include "light.h"
 #include "image.h"
@@ -80,9 +81,14 @@ Object* Raytracer::parseObject(const YAML::Node& node)
         returnObject = sphere;
     }
 
-	else if (objectType == "cube")
+	else if (objectType == "box")
 	{
-
+		Point pos;
+		node["position"] >> pos;
+		double e;
+		node["edge"] >> e;
+		Box *box = new Box(pos, e);
+		returnObject = box;
 	}
 
     if (returnObject) {

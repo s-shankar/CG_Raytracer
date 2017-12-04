@@ -8,10 +8,12 @@ Lights:
 
 
 Objects:
-- type: "Box"
-  material :
-  	color: [1.0,0.0,0.0]
-  	ka: 0.2
-  	ks: 1.0
-  	kd: 0.5
-  	n: 32
+- type: box
+  position: [290,170,150]
+  edge: 10
+  material: # red
+    color: [1.0,0.0,0.0]
+    ka: 0.2
+    kd: 0.7
+    ks: 0.8
+    n: 32
