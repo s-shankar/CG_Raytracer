@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <vector>
-#include "object.h"
+#include "plane.h"
 
 class Box : public Object
 {
@@ -33,6 +33,7 @@ public:
 	}
 
 	virtual Hit intersect(const Ray &ray);
+	virtual Intersection distanceToPlane(const Plane &plane);
 	/*
 	Need 8 points and 12 edges
 	*/
