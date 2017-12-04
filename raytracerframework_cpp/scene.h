@@ -36,6 +36,7 @@ private:
     std::vector<Object*> objects;
     std::vector<Light*> lights;
     Triple eye;
+	Vector normalNearClippingPlane;
 	RenderMode renderMode;
 public:
     Color trace(const Ray &ray);
@@ -43,6 +44,7 @@ public:
     void addObject(Object *o);
     void addLight(Light *l);
     void setEye(Triple e);
+	void setNormalNearClippingPlane(Triple e);
 	void setRenderMode(string renderMode_);
     unsigned int getNumObjects() { return objects.size(); }
     unsigned int getNumLights() { return lights.size(); }

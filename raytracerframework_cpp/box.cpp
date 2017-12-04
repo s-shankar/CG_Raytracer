@@ -6,5 +6,5 @@ Hit Box::intersect(const Ray & ray)
 
 	Vector OC ; // does ray intersect one of box's coordinates? if yes then normalize
 
-	return Hit();
+	return Hit::NO_HIT();
 }

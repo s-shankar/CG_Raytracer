@@ -17,7 +17,7 @@
 #ifndef SPHERE_H_115209AE
 #define SPHERE_H_115209AE
 
-#include "object.h"
+#include "plane.h"
 
 class Sphere : public Object
 {
@@ -25,6 +25,7 @@ public:
     Sphere(Point position,double r) : position(position), r(r) { }
 
     virtual Hit intersect(const Ray &ray);
+	virtual Intersection distanceToPlane(const Plane &plane);
 
     const Point position;
     const double r;

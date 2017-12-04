@@ -95,3 +95,9 @@ Hit Sphere::intersect(const Ray &ray)
 
     return Hit(t,N);
 }
+
+Intersection Sphere::distanceToPlane(const Plane &plane)
+{
+	double distance = plane.distance(position) - r;
+	return Intersection(distance, position + r * plane.n);
+}

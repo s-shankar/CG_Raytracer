@@ -21,6 +21,8 @@
 #include "light.h"
 
 class Material;
+class Intersection;
+class Plane;
 
 class Object {
 public:
@@ -29,6 +31,7 @@ public:
     virtual ~Object() { }
 
     virtual Hit intersect(const Ray &ray) = 0;
+	virtual Intersection distanceToPlane(const Plane &plane) = 0;
 };
 
 #endif /* end of include guard: OBJECT_H_AXKLE0OF */

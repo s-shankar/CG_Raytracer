@@ -129,6 +129,8 @@ bool Raytracer::readScene(const std::string& inputFilename)
             // Read scene configuration options
             scene->setEye(parseTriple(doc["Eye"]));
 
+			scene->setNormalNearClippingPlane(parseTriple(doc["NormalNearClippingPlane"]));
+
             // Read and parse the scene objects
             const YAML::Node& sceneObjects = doc["Objects"];
             if (sceneObjects.GetType() != YAML::CT_SEQUENCE) {

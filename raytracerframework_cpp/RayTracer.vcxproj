@@ -85,11 +85,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="box.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="material.cpp" />
+    <ClCompile Include="Plane.cpp" />
     <ClCompile Include="raytracer.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="sphere.cpp" />
@@ -118,11 +120,13 @@
     <ClCompile Include="yaml\stream.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="box.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="material.h" />
     <ClInclude Include="object.h" />
+    <ClInclude Include="plane.h" />
     <ClInclude Include="raytracer.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="sphere.h" />
