@@ -175,6 +175,11 @@ void Scene::setEye(Triple e)
     eye = e;
 }
 
+void Scene::setNormalNearClippingPlane(Triple e)
+{
+	normalNearClippingPlane = e;
+}
+
 void Scene::setRenderMode(string renderMode_)
 {
 	if(renderMode_ == "phong")

@@ -85,7 +85,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="box.cpp" />
+    <ClCompile Include="Box.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="lodepng.cpp" />
@@ -120,7 +120,7 @@
     <ClCompile Include="yaml\stream.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="box.h" />
+    <ClInclude Include="Box.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="lodepng.h" />

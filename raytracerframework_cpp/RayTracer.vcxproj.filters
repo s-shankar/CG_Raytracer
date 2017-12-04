@@ -111,10 +111,10 @@
     <ClCompile Include="yaml\stream.cpp">
       <Filter>yaml</Filter>
     </ClCompile>
-    <ClCompile Include="box.cpp">
+    <ClCompile Include="Plane.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Plane.cpp">
+    <ClCompile Include="Box.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -260,10 +260,10 @@
     <ClInclude Include="yaml\yaml.h">
       <Filter>yaml</Filter>
     </ClInclude>
-    <ClInclude Include="box.h">
+    <ClInclude Include="plane.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="plane.h">
+    <ClInclude Include="Box.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

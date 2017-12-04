@@ -39,7 +39,7 @@ public:
 	*/
 
 	/* first vertex, then we can determine where the 7 others are
-		should we also consider direction of the box ?
+	should we also consider direction of the box ?
 	*/
 	const Point position;
 	std::vector<Point> vertex;
