@@ -8,4 +8,5 @@ Exercices made by Tristan HERNANT and Shankar SIVAGNA
 
 # Week numbers
 
-Assignement 1 : from 11/20/2017 to 11/26/2017
+Assignment 1 : from 11/20/2017 to 11/26/2017
+Assignment 2 : from 11/27/2017 to 11/03/2017
