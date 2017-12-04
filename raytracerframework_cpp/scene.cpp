@@ -17,6 +17,7 @@
 
 #include "scene.h"
 #include "material.h"
+#include "plane.h"
 
 Color Scene::trace(const Ray &ray)
 {
@@ -102,23 +103,35 @@ Color Scene::trace(const Ray &ray)
 
 	if (renderMode == RenderMode::zbuffer)
 	{
-		double	farClippingPlane = 0, 
-				nearClippingPlane = /*eye.z*/ 450, 
-				maxDistance = nearClippingPlane - farClippingPlane,
-				distance/* = min_hit.t < 0 ?
-								0 : min_hit.t > nearClippingPlane ? 
-									nearClippingPlane : (nearClippingPlane - min_hit.t)*/;
+		Plane	farClippingPlane(Point(0, 0, 0), normalNearClippingPlane),
+				maxNearClippingPlane(eye, normalNearClippingPlane);
 
-		distance = min_hit.t - (eye.z - nearClippingPlane);
+		Point p = eye;
+		double maxDistance = maxNearClippingPlane - farClippingPlane, d = maxDistance;
+		Intersection intersection;
+		for (unsigned int i = 0; i < objects.size(); ++i)
+		{
+			intersection = objects[i]->distanceToPlane(maxNearClippingPlane);
+			if (intersection.t < d)
+			{
+				d = intersection.t;
+				p = intersection.p;
+			}
+		}
+
+		Plane nearClippingPlane(p, normalNearClippingPlane);
+		maxDistance = nearClippingPlane - farClippingPlane;
+
+		double	distance = min_hit.t - (maxNearClippingPlane - nearClippingPlane);
 
 		if (distance < 0)
 			distance = 0;
-		else if (maxDistance - distance < farClippingPlane)
+		else if (maxDistance - distance < 0)
 			distance = maxDistance;
-		
+
 
 		Color color(0, 0, 0);
-		
+
 		color += 1 - (distance / maxDistance);
 
 		return color;
