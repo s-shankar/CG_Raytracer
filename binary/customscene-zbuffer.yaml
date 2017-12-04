@@ -12,7 +12,7 @@
 #  The example scene description should largely speak for itself. By now
 #  it should be clear that the #-character can be used to insert comments.
 
-RenderMode: "zbuffer"
+RenderMode: "phong"
 
 Eye: [200,200,1000] 
 NormalNearClippingPlane : [0,0,1] 
@@ -23,7 +23,7 @@ Lights:
 
 Objects:
 - type: plane
-  point: [90,320,100]
+  point: [90,320,50]
   normal: [0,0,-1]
   material: # blue
     color: [0.0,0.0,1.0]
