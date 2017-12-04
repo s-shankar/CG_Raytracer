@@ -141,6 +141,9 @@ bool Raytracer::readScene(const std::string& inputFilename)
 			// Read render mode
 			scene->setRenderMode(parseString(doc["RenderMode"]));
 
+			// Read if shadow mode is enabled
+			scene->setShadows(parseString(doc["Shadows"]));
+
             // Read scene configuration options
             scene->setEye(parseTriple(doc["Eye"]));
 

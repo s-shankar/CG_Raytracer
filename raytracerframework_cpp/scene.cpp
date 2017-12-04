@@ -24,6 +24,7 @@ Color Scene::trace(const Ray &ray)
     // Find hit object and distance
     Hit min_hit(std::numeric_limits<double>::infinity(),Vector());
     Object *obj = NULL;
+	vector<Hit> previousRayIntersection; // store previous intersected objects by light source ray before intersecting min_hit
     for (unsigned int i = 0; i < objects.size(); ++i) {
         Hit hit(objects[i]->intersect(ray));
         if (hit.t<min_hit.t) {
@@ -94,7 +95,23 @@ Color Scene::trace(const Ray &ray)
 			// specular : (R.V)^alpha
 			if (R.dot(V) > 0)
 				specular += pow(R.dot(V), material->n) * lights.at(i)->color;
+
+			/* get reflection light and see if it intersects another object for shadow*/
+			Ray shadowRay(hit, R);
+			
+			
+
 		}
+
+		if (shadows)
+		{
+			// intersects other objects, do not compute specular + diffuse color
+			if (!previousRayIntersection.empty())
+			{
+				return ambiant * material->color;
+			}
+		}
+
 		diffuse *= material->kd;
 		specular *= material->ks;
 
@@ -145,6 +162,48 @@ Color Scene::trace(const Ray &ray)
 	return  material->color;
 }
 
+bool Scene::getDistanceIntersection(const Ray & ray, Object &objet, std::vector<Object*> objects, int n)
+{
+	if (n > 0)
+	{
+		/* if n , verifier qu'il y a intersection. si oui, mode shadow pour le point precedant et on relance la fonction pour ce point*/
+		// Find hit object and distance
+		Hit min_hit(std::numeric_limits<double>::infinity(), Vector());
+		Object *obj = NULL;
+		vector<Hit> previousRayIntersection; // store previous intersected objects by light source ray before intersecting min_hit
+		for (unsigned int i = 0; i < objects.size(); ++i)
+		{
+			Hit hit(objects[i]->intersect(ray));
+			if (hit.t<min_hit.t)
+			{
+				min_hit = hit;
+				obj = objects[i];
+			}
+		}
+
+		if (obj)
+		{
+			Material *material = obj->material;            //the hit objects material
+			Point hit = ray.at(min_hit.t);                 //the hit point
+			Vector N = min_hit.N;                          //the normal at hit point
+			Vector V = -ray.D;                             //the view vector
+			/*R = (2 * L.dot(N) * N - L).normalized();
+			Ray shdwRay(hit, R);
+			bool has_hit = getDistanceIntersection();
+			if(true)
+			apply phong specular + diffusion
+
+			else
+			apply
+
+			return true;
+			*/
+
+		}
+	}
+	return false;
+}
+
 void Scene::render(Image &img)
 {
     int w = img.width();
@@ -190,4 +249,12 @@ void Scene::setRenderMode(string renderMode_)
 
 	if (renderMode_ == "normal")
 		renderMode = normal;
+}
+
+void Scene::setShadows(string shadow)
+{
+	if (shadow == "true")
+		shadows = true;
+	else if(shadow == "false")
+		shadows = false;
 }

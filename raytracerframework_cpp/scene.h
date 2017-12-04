@@ -38,14 +38,17 @@ private:
     Triple eye;
 	Vector normalNearClippingPlane;
 	RenderMode renderMode;
+	bool shadows = false;
 public:
     Color trace(const Ray &ray);
+	bool getDistanceIntersection(const Ray &ray,Object &objet,std::vector<Object*> objects, int n);
     void render(Image &img);
     void addObject(Object *o);
     void addLight(Light *l);
     void setEye(Triple e);
 	void setNormalNearClippingPlane(Triple e);
 	void setRenderMode(string renderMode_);
+	void setShadows(string shadow);
     unsigned int getNumObjects() { return objects.size(); }
     unsigned int getNumLights() { return lights.size(); }
 };
