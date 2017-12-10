@@ -110,8 +110,7 @@ Color Scene::trace(const Ray &ray)
 					colour += ambiant * material->color;
 					continue;
 				}
-				else
-					colour += (ambiant + (diffuse*material->kd)) * material->color + specular*material->ks;
+				colour += (ambiant + (diffuse*material->kd)) * material->color + specular*material->ks;
 			}
 
 		}
@@ -197,7 +196,8 @@ bool Scene::getDistanceIntersection(const Ray & ray, const Ray &shadow, Point li
 			
 			Ray shdwRay(s_hit, L);
 			//bool has_hit = getDistanceIntersection(shadow,shdwRay,s_hit,*obj,n-1);
-			bool distance = (lightHit-ray.at(min_hit.t)).length_2() < (lightHit-ray.D).length_2() ;
+			// distance 
+			bool distance = (lightHit-ray.at(min_hit.t)).length() < (lightHit-ray.D).length() ;
 			/*if(true)
 			apply phong specular + diffusion
 
