@@ -41,7 +41,7 @@ private:
 	bool shadows = false;
 public:
     Color trace(const Ray &ray);
-	bool getDistanceIntersection(const Ray &ray,Object &objet,std::vector<Object*> objects, int n);
+	bool getDistanceIntersection(const Ray &ray, const Ray &shadow, Point lightHit, Object &objet, int n);
     void render(Image &img);
     void addObject(Object *o);
     void addLight(Light *l);
