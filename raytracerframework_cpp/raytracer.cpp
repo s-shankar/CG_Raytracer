@@ -144,6 +144,9 @@ bool Raytracer::readScene(const std::string& inputFilename)
 			// Read if shadow mode is enabled
 			scene->setShadows(parseString(doc["Shadows"]));
 
+			// Read if there is any any maxRecursiveDepth in file
+			scene->setMaxRecursionDepth(parseString(doc["MaxRecursionDepth"]));
+
             // Read scene configuration options
             scene->setEye(parseTriple(doc["Eye"]));
 

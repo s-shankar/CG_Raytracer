@@ -39,9 +39,10 @@ private:
 	Vector normalNearClippingPlane;
 	RenderMode renderMode;
 	bool shadows = false;
+	unsigned int maxRecursionDepth = 0;
 public:
-    Color trace(const Ray &ray);
-	bool getDistanceIntersection(const Ray &ray, const Ray &shadow, Point lightHit, Object &objet, int n);
+    Color trace(const Ray &ray, unsigned int depth = 0 );
+	bool getDistanceIntersection(const Ray &ray, const Ray &shadow, Point lightHit, Object &objet);
     void render(Image &img);
     void addObject(Object *o);
     void addLight(Light *l);
@@ -49,6 +50,7 @@ public:
 	void setNormalNearClippingPlane(Triple e);
 	void setRenderMode(string renderMode_);
 	void setShadows(string shadow);
+	void setMaxRecursionDepth(string depth);
     unsigned int getNumObjects() { return objects.size(); }
     unsigned int getNumLights() { return lights.size(); }
 };

@@ -14,17 +14,15 @@
 
 Eye: [200,200,1000]  
 
-Shadows: true
-
 RenderMode: "phong"
-MaxRecursionDepth: 0
-Lights:
-- position: [-200,600,1500]
-  color: [0.4,0.4,0.8]
-- position: [600,600,1500]
-  color: [0.8,0.8,0.4]
+Shadows: true
+MaxRecursionDepth: 2
 
 NormalNearClippingPlane: [0.0,0.0,1.0]
+
+Lights:
+- position: [-200,600,1500]
+  color: [1.0,1.0,1.0]
 
 Objects:
 - type: sphere

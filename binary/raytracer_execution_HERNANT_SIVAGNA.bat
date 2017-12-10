@@ -1,7 +1,8 @@
 @echo off
-echo Assignment 02 by Tristan Hernant and Shankar SIVAGNA
-start /d %~dp0 RayTracer.exe scene01-zbuffer.yaml
-start /d %~dp0 RayTracer.exe scene01-normal.yaml
-start /d %~dp0 RayTracer.exe customscene-zbuffer.yaml
+echo Assignment 03 by Tristan Hernant and Shankar SIVAGNA
+start /d %~dp0 RayTracer.exe scene01-shadows.yaml
+start /d %~dp0 RayTracer.exe scene01-reflect-shadows.yaml
+start /d %~dp0 RayTracer.exe scene01-lights-shadows.yaml
+start /d %~dp0 RayTracer.exe scene01-reflect-lights-shadows.yaml
 echo Done
 pause

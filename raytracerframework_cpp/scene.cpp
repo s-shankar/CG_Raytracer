@@ -15,11 +15,13 @@
 //  http://isgwww.cs.uni-magdeburg.de/graphik/lehre/cg2/projekt/rtprojekt.html 
 //
 
+#include <iostream>
+#include <string>
 #include "scene.h"
 #include "material.h"
 #include "plane.h"
 
-Color Scene::trace(const Ray &ray)
+Color Scene::trace(const Ray &ray, unsigned int depth)
 {
     // Find hit object and distance
     Hit min_hit(std::numeric_limits<double>::infinity(),Vector());
@@ -100,9 +102,9 @@ Color Scene::trace(const Ray &ray)
 			
 			if (shadows)
 			{
-				/* get reflection light and see if it intersects another object for shadow*/
+				/* get shadow ray and see if it intersects another object for shadow*/
 				Ray shadowRay(hit, L);
-				if (getDistanceIntersection(ray, shadowRay, hit, *obj, 1))
+				if (getDistanceIntersection(ray, shadowRay, hit, *obj))
 					shdw = true;
 				// intersects other objects, do not compute specular + diffuse color
 				if (shdw)
@@ -113,6 +115,18 @@ Color Scene::trace(const Ray &ray)
 				colour += (ambiant + (diffuse*material->kd)) * material->color + specular*material->ks;
 			}
 
+		}
+
+		if (depth < maxRecursionDepth)
+		{
+			/* Reflection ray dir = Incident ray dir - 2 * (incident ray dir dot surface normal) * surface normal 
+				R = I - 2*cos(theta)*N
+			*/
+			Vector reflectionVector(ray.D-(2*(ray.D.dot(N))*N));
+			Ray reflectionRay(hit,reflectionVector);
+			// Call recursively in order to get correct reflection color
+			Color reflectionColor = trace(reflectionRay,depth+1);
+			colour += reflectionColor*material->ks;
 		}
 
 
@@ -163,53 +177,33 @@ Color Scene::trace(const Ray &ray)
 	return  material->color;
 }
 
-bool Scene::getDistanceIntersection(const Ray & ray, const Ray &shadow, Point lightHit, Object &objet, int n)
+bool Scene::getDistanceIntersection(const Ray & ray, const Ray &shadow, Point lightHit, Object &objet)
 {
-	if (n > 0)
+	/* find intersection between another object and shadowRay and compute according to distance */
+	Hit min_hit(std::numeric_limits<double>::infinity(), Vector());
+	Object *obj = NULL;
+	for (unsigned int i = 0; i < objects.size(); ++i)
 	{
-		Vector L, R;
-		/* if n , verifier qu'il y a intersection. si oui, mode shadow pour le point precedant et on relance la fonction pour ce point*/
-		// Find hit object and distance
-		Hit min_hit(std::numeric_limits<double>::infinity(), Vector());
-		Object *obj = NULL;
-		for (unsigned int i = 0; i < objects.size(); ++i)
+		if (objects[i] == obj)
+			continue;
+		Hit hit(objects[i]->intersect(shadow));
+
+		// face culling in order to reject bad intersections
+		if (-ray.D.dot(hit.N) <0 && hit.t<min_hit.t)
 		{
-			Hit hit(objects[i]->intersect(shadow));
-			if (hit.t<min_hit.t)
-			{
-				min_hit = hit;
-				obj = objects[i];
-			}
+			min_hit = hit;
+			obj = objects[i];
 		}
+	}
+	//std::cout << " MIN_HIT ombre : " << min_hit.t << " " << std::endl;
 
-		if (obj)
-		{
-			Material *material = obj->material;            //the hit objects material
-			Point s_hit = shadow.at(min_hit.t);                 //the hit point
-			Vector N = min_hit.N;                          //the normal at hit point
-			Vector V = -shadow.D;                             //the view vector
-			for (size_t i = 0; i < lights.size(); i++)
-			{
-				L = (lights.at(i)->position - s_hit).normalized();
-				R = (2 * L.dot(N) * N - L).normalized();
-			}
-			
-			Ray shdwRay(s_hit, L);
-			//bool has_hit = getDistanceIntersection(shadow,shdwRay,s_hit,*obj,n-1);
-			// distance 
-			bool distance = (lightHit-ray.at(min_hit.t)).length() < (lightHit-ray.D).length() ;
-			/*if(true)
-			apply phong specular + diffusion
-
-			else
-			apply
-			
+	if (obj)
+	{
+		Point s_hit = shadow.at(min_hit.t);
+		bool distance = (lightHit-ray.at(min_hit.t)).length() < (lightHit-ray.D).length() ;
+		// correct distance enable shadowing
+		if(!distance)
 			return true;
-			*/
-			if(!distance)
-				return true;
-
-		}
 	}
 	return false;
 }
@@ -267,4 +261,9 @@ void Scene::setShadows(string shadow)
 		shadows = true;
 	else if(shadow == "false")
 		shadows = false;
+}
+
+void Scene::setMaxRecursionDepth(string depth)
+{
+	maxRecursionDepth = std::stoi(depth);
 }
