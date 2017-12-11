@@ -54,3 +54,9 @@ double Plane::distance(const Point &point) const
 {
 	return abs(point.dot(n) - p.dot(n))/ n.length();
 }
+
+void Plane::changeBase(const Eigen::Matrix3d &changeOfBaseMatrix)
+{
+	p = (Point)p.matrixProduct(changeOfBaseMatrix);
+	n = (Vector)n.matrixProduct(changeOfBaseMatrix);
+}

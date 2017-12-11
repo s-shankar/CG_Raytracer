@@ -17,6 +17,7 @@
 
 #include <math.h>
 #include <iostream>
+#include <Eigen/Dense>
 using namespace std;
 
 class Triple {
@@ -142,6 +143,16 @@ public:
             z*t.x - x*t.z,
             x*t.y - y*t.x);
     }
+
+	const Triple matrixProduct(const Eigen::Matrix3d &changeOfBaseMatrix) const
+	{
+		Triple res;
+		res.x = changeOfBaseMatrix(0, 0) * x + changeOfBaseMatrix(1, 0) * y + changeOfBaseMatrix(2, 0) * z;
+		res.y = changeOfBaseMatrix(0, 1) * x + changeOfBaseMatrix(1, 1) * y + changeOfBaseMatrix(2, 1) * z;
+		res.z = changeOfBaseMatrix(0, 2) * x + changeOfBaseMatrix(1, 2) * y + changeOfBaseMatrix(2, 2) * z;
+
+		return res;
+	}
 
     double length() const
     {

@@ -22,6 +22,8 @@
 #include "light.h"
 #include "object.h"
 #include "image.h"
+#include <Eigen/Dense>
+
 
 enum RenderMode 
 {
@@ -36,8 +38,10 @@ private:
     std::vector<Object*> objects;
     std::vector<Light*> lights;
     Triple eye;
-	Vector normalNearClippingPlane;
+	Vector eyeNormalDirection;
+	Vector eyeTopDirection;
 	RenderMode renderMode;
+	Eigen::Matrix3d changeOfBaseMatrix;
 	bool shadows = false;
 	unsigned int maxRecursionDepth = 0;
 public:
@@ -47,8 +51,10 @@ public:
     void addObject(Object *o);
     void addLight(Light *l);
     void setEye(Triple e);
-	void setNormalNearClippingPlane(Triple e);
+	void setEyeNormalDirection(Triple e);
+	void setEyeTopDirection(Triple e);
 	void setRenderMode(string renderMode_);
+	void createChangeOfBaseMatrix();
 	void setShadows(string shadow);
 	void setMaxRecursionDepth(string depth);
     unsigned int getNumObjects() { return objects.size(); }

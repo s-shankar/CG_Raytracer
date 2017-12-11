@@ -90,7 +90,7 @@ Object* Raytracer::parseObject(const YAML::Node& node)
 		returnObject = plane;
 	}
 
-	else if (objectType == "box")
+	/*if (objectType == "box")
 	{
 		Point pos;
 		node["position"] >> pos;
@@ -98,7 +98,7 @@ Object* Raytracer::parseObject(const YAML::Node& node)
 		node["edge"] >> e;
 		Box *box = new Box(pos, e);
 		returnObject = box;
-	}
+	}*/
 
     if (returnObject) {
         // read the material and attach to object
@@ -149,8 +149,9 @@ bool Raytracer::readScene(const std::string& inputFilename)
 
             // Read scene configuration options
             scene->setEye(parseTriple(doc["Eye"]));
-
-			scene->setNormalNearClippingPlane(parseTriple(doc["NormalNearClippingPlane"]));
+			scene->setEyeNormalDirection(parseTriple(doc["EyeNormalDirection"]));
+			scene->setEyeTopDirection(parseTriple(doc["EyeTopDirection"]));
+			scene->createChangeOfBaseMatrix(); 
 
             // Read and parse the scene objects
             const YAML::Node& sceneObjects = doc["Objects"];

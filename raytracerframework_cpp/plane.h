@@ -10,12 +10,13 @@ public:
 
 	virtual Hit intersect(const Ray &ray);
 	virtual Intersection distanceToPlane(const Plane &plane);
+	virtual void changeBase(const Eigen::Matrix3d &changeOfBaseMatrix);
 
 	double operator-(const Plane &plane);
 	double distance(const Point &point) const;
 
-	const Point p;
-	const Vector n;
+	/*const*/ Point p;
+	/*const*/ Vector n;
 };
 
 class Intersection

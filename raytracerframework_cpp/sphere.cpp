@@ -46,7 +46,7 @@ Hit Sphere::intersect(const Ray &ray)
 	double cosAlpha = OCn.dot(ray.D); //here alpha is the angle formed by the vectors CO and D
 
 	/*case where the ray is directed behind the direction of the sphere*/
-    if (acos(cosAlpha) <= 0)
+    if (acos(cosAlpha) < 0)
         return Hit::NO_HIT();
     
 	double OClength = OC.length();
@@ -106,4 +106,9 @@ Intersection Sphere::distanceToPlane(const Plane &plane)
 {
 	double distance = plane.distance(position) - r;
 	return Intersection(distance, position + r * plane.n);
+}
+
+void Sphere::changeBase(const Eigen::Matrix3d &changeOfBaseMatrix)
+{
+	position = (Point)position.matrixProduct(changeOfBaseMatrix);
 }

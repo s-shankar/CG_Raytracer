@@ -19,6 +19,7 @@
 
 #include "triple.h"
 #include "light.h"
+#include <Eigen/Dense>
 
 class Material;
 class Intersection;
@@ -32,6 +33,7 @@ public:
 
     virtual Hit intersect(const Ray &ray) = 0;
 	virtual Intersection distanceToPlane(const Plane &plane) = 0;
+	virtual void changeBase(const Eigen::Matrix3d &changeOfBaseMatrix) = 0;
 };
 
 #endif /* end of include guard: OBJECT_H_AXKLE0OF */

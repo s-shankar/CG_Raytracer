@@ -26,8 +26,9 @@ public:
 
     virtual Hit intersect(const Ray &ray);
 	virtual Intersection distanceToPlane(const Plane &plane);
+	void Sphere::changeBase(const Eigen::Matrix3d &changeOfBaseMatrix);
 
-    const Point position;
+    /*const*/ Point position;
     const double r;
 };
 

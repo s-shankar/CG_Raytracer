@@ -14,7 +14,9 @@
 
 RenderMode: "normal"
 
-Eye: [200,200,1000]  
+Eye: [200,200,1000] 
+EyeNormalDirection : [0,0,1]
+EyeTopDirection : [0,1,0]
 
 Lights:
 - position: [-200,600,1500]

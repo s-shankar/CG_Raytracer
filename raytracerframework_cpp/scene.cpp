@@ -66,77 +66,79 @@ Color Scene::trace(const Ray &ray, unsigned int depth)
 		/* Using Phong Shading formula */
 		Vector L, R;
 
-		Color colour(0, 0, 0);
+		Color color;
 
 		//ambiant member
-		double ambiant = material->ka;                  // place holder
+		double ambiant = 0;            
 
-														//difuse and specular member
 		Color diffuse, specular;
-		bool shdw = false;
-		/* For each Light Point, check if the Light Source
-		hits the Object.
-		Comparing with L, V, R and N vectors. Need to normalizes vectors, so that
-		their dot product gives the cosinus of their angle.
-		It will enable to compute the illumination thanks to
-		the colour the Light Point and the Object colour.
-		
-		Assuming the intensity properties of the Object are all equal to 1.*/
+		bool shdw;
+
+		/*	For each Light Point, check if the Light Source
+		 *	hits the Object.
+		 *	Comparing with L, V, R and N vectors. Need to normalizes vectors, so that
+		 *	their dot product gives the cosinus of their angle.
+		 *	It will enable to compute the illumination thanks to
+		 *	the colour the Light Point and the Object colour.
+		 *
+		 *	Assuming the intensity properties of the Object are all equal to 1.
+		 */
+
 		for (size_t i = 0; i < lights.size(); i++)
 		{
 			/* Light vector given by the distance between
 			the Light Point and Object hit Point. */
 			L = (lights.at(i)->position - hit).normalized();
 
-			// diffusion  : (L.N)
-			if (L.dot(N) > 0)
-				diffuse += L.dot(N) * lights.at(i)->color;
-
-			// R = 2(N.L)N - L
-			R = (2 * L.dot(N) * N - L).normalized();
-
-			// specular : (R.V)^alpha
-			if (R.dot(V) > 0)
-				specular += pow(R.dot(V), material->n) * lights.at(i)->color;
-
-			
+			shdw = false;
 			if (shadows)
 			{
 				/* get shadow ray and see if it intersects another object for shadow*/
-				Ray shadowRay(hit, L);
-				if (getDistanceIntersection(ray, shadowRay, hit, *obj))
-					shdw = true;
-				// intersects other objects, do not compute specular + diffuse color
-				if (shdw)
-				{
-					colour += ambiant * material->color;
-					continue;
-				}
-				colour += (ambiant + (diffuse*material->kd)) * material->color + specular*material->ks;
+				//Ray shadowRay(hit, L);
+				shdw = getDistanceIntersection(ray, Ray(hit, L), hit, *obj);
 			}
 
+			ambiant = material->ka;
+
+			if(!shdw)
+			{
+				double ldotn = L.dot(N);
+				// diffusion  : (L.N)
+				if (ldotn >= 0)
+					diffuse += ldotn * lights.at(i)->color;
+
+				// R = 2(N.L)N - L
+				R = (2 * ldotn * N - L).normalized();
+
+				// specular : (R.V)^alpha
+				double rdotv = R.dot(V);
+				if (rdotv >= 0)
+					specular += pow(rdotv, material->n) * lights.at(i)->color;
+			}
+			
+			color = (ambiant + diffuse*material->kd)*material->color + specular*material->ks;
 		}
 
 		if (depth < maxRecursionDepth)
 		{
-			/* Reflection ray dir = Incident ray dir - 2 * (incident ray dir dot surface normal) * surface normal 
-				R = I - 2*cos(theta)*N
-			*/
+			/*  
+			 *  Reflection ray dir = Incident ray dir - 2 * (incident ray dir dot surface normal) * surface normal 
+			 * 	R = I - 2*cos(theta)*N
+			 */
 			Vector reflectionVector(ray.D-(2*(ray.D.dot(N))*N));
 			Ray reflectionRay(hit,reflectionVector);
 			// Call recursively in order to get correct reflection color
 			Color reflectionColor = trace(reflectionRay,depth+1);
-			colour += reflectionColor*material->ks;
+			color += reflectionColor*material->ks;
 		}
 
-
-		return colour;
+		return color;
 	}
 
 	if (renderMode == RenderMode::zbuffer)
 	{
-		Plane	farClippingPlane(Point(0, 0, 0), normalNearClippingPlane),
-				maxNearClippingPlane(eye, normalNearClippingPlane);
+		Plane	farClippingPlane(Point(0, 0, 0), eyeNormalDirection),
+				maxNearClippingPlane(eye, eyeNormalDirection);
 
 		Point p = eye;
 		double maxDistance = maxNearClippingPlane - farClippingPlane, d = maxDistance;
@@ -151,7 +153,7 @@ Color Scene::trace(const Ray &ray, unsigned int depth)
 			}
 		}
 
-		Plane nearClippingPlane(p, normalNearClippingPlane);
+		Plane nearClippingPlane(p, eyeNormalDirection);
 		maxDistance = nearClippingPlane - farClippingPlane;
 
 		double	distance = min_hit.t - (maxNearClippingPlane - nearClippingPlane);
@@ -195,7 +197,6 @@ bool Scene::getDistanceIntersection(const Ray & ray, const Ray &shadow, Point li
 			obj = objects[i];
 		}
 	}
-	//std::cout << " MIN_HIT ombre : " << min_hit.t << " " << std::endl;
 
 	if (obj)
 	{
@@ -238,9 +239,23 @@ void Scene::setEye(Triple e)
     eye = e;
 }
 
-void Scene::setNormalNearClippingPlane(Triple e)
+void Scene::setEyeNormalDirection(Triple e)
 {
-	normalNearClippingPlane = e;
+	eyeNormalDirection = e;
+}
+
+void Scene::setEyeTopDirection(Triple e)
+{
+	eyeTopDirection = e;
+}
+
+void Scene::createChangeOfBaseMatrix()
+{
+	Vector eyeSideDirection = eyeNormalDirection.cross(eyeTopDirection);
+
+	changeOfBaseMatrix << eyeSideDirection.x, eyeTopDirection.x, eyeNormalDirection.x,
+		eyeSideDirection.y, eyeTopDirection.y, eyeNormalDirection.y,
+		eyeSideDirection.z, eyeTopDirection.z, eyeNormalDirection.z;
 }
 
 void Scene::setRenderMode(string renderMode_)
