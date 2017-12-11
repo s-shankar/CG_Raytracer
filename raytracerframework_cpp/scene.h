@@ -41,6 +41,7 @@ private:
 	Vector eyeNormalDirection;
 	Vector eyeTopDirection;
 	RenderMode renderMode;
+	int width, height;
 	Eigen::Matrix3d changeOfBaseMatrix;
 	bool shadows = false;
 	unsigned int maxRecursionDepth = 0;
@@ -54,6 +55,10 @@ public:
 	void setEyeNormalDirection(Triple e);
 	void setEyeTopDirection(Triple e);
 	void setRenderMode(string renderMode_);
+	void setWidth(int w);
+	void setHeight(int l);
+	const int Width() const;
+	const int Height() const;
 	void createChangeOfBaseMatrix();
 	void setShadows(string shadow);
 	void setMaxRecursionDepth(string depth);

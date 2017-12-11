@@ -19,6 +19,8 @@ EyeTopDirection : [0,1,0]
 RenderMode: "phong"
 Shadows: true
 MaxRecursionDepth: 10
+Height: 800
+Width: 400
 
 Lights:
 - position: [-200,600,1500]
