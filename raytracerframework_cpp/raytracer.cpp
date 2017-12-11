@@ -29,6 +29,7 @@
 void operator >> (const YAML::Node& node, Triple& t);
 Triple parseTriple(const YAML::Node& node);
 string parseString(const YAML::Node& node);
+int parseInt(const YAML::Node& node);
 
 
 void operator >> (const YAML::Node& node, Triple& t)
@@ -51,6 +52,13 @@ Triple parseTriple(const YAML::Node& node)
 string parseString(const YAML::Node& node)
 {
 	string res;
+	node >> res;
+	return res;
+}
+
+int parseInt(const YAML::Node& node)
+{
+	int res;
 	node >> res;
 	return res;
 }
@@ -90,15 +98,19 @@ Object* Raytracer::parseObject(const YAML::Node& node)
 		returnObject = plane;
 	}
 
-	/*if (objectType == "box")
+	if (objectType == "box")
 	{
 		Point pos;
-		node["position"] >> pos;
+		node["centerOfCube"] >> pos;
 		double e;
 		node["edge"] >> e;
-		Box *box = new Box(pos, e);
+		Vector normalUpFace;
+		node["normalUpFace"] >> normalUpFace;
+		Vector normalSideFace;
+		node["normalSideFace"] >> normalSideFace;
+		Box *box = new Box(pos, e, normalUpFace, normalSideFace);
 		returnObject = box;
-	}*/
+	}
 
     if (returnObject) {
         // read the material and attach to object
@@ -140,6 +152,8 @@ bool Raytracer::readScene(const std::string& inputFilename)
 
 			// Read render mode
 			scene->setRenderMode(parseString(doc["RenderMode"]));
+			scene->setWidth(parseInt(doc["Width"]));
+			scene->setHeight(parseInt(doc["Height"]));
 
 			// Read if shadow mode is enabled
 			scene->setShadows(parseString(doc["Shadows"]));
@@ -196,7 +210,7 @@ bool Raytracer::readScene(const std::string& inputFilename)
 
 void Raytracer::renderToFile(const std::string& outputFilename)
 {
-    Image img(400,400);
+    Image img(scene->Height(), scene->Width());
     cout << "Tracing..." << endl;
     scene->render(img);
     cout << "Writing image to " << outputFilename << "..." << endl;

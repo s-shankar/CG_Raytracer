@@ -1,6 +1,6 @@
 RenderMode: "phong"
-
-NormalNearClippingPlane: [0,0,1]
+Shadows: true
+MaxRecursionDepth: 10
 
 Eye: [200,200,1000]  
 EyeNormalDirection : [0,0,1]
@@ -13,8 +13,10 @@ Lights:
 
 Objects:
 - type: box
-  position: [290,170,150]
-  edge: 10
+  centerOfCube: [150,250,150]
+  normalUpFace : [1,0,0]
+  normalSideFace : [0,1,0]
+  edge: 100
   material: # red
     color: [1.0,0.0,0.0]
     ka: 0.2

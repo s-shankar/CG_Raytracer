@@ -283,6 +283,26 @@ void Scene::setMaxRecursionDepth(string depth)
 	maxRecursionDepth = std::stoi(depth);
 }
 
+void Scene::setWidth(int w)
+{
+	width = w;
+}
+
+void Scene::setHeight(int l)
+{
+	height = l;
+}
+
+const int Scene::Width() const
+{
+	return width;
+}
+
+const int Scene::Height() const
+{
+	return height;
+}
+
 void Scene::setSuperSampling(string factor)
 {
 	super_sampling_factor = std::stoi(factor);
