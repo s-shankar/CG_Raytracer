@@ -44,6 +44,7 @@ private:
 	Eigen::Matrix3d changeOfBaseMatrix;
 	bool shadows = false;
 	unsigned int maxRecursionDepth = 0;
+	unsigned int super_sampling_factor=0;
 public:
     Color trace(const Ray &ray, unsigned int depth = 0 );
 	bool getDistanceIntersection(const Ray &ray, const Ray &shadow, Point lightHit, Object &objet);
@@ -57,6 +58,7 @@ public:
 	void createChangeOfBaseMatrix();
 	void setShadows(string shadow);
 	void setMaxRecursionDepth(string depth);
+	void setSuperSampling(string factor);
     unsigned int getNumObjects() { return objects.size(); }
     unsigned int getNumLights() { return lights.size(); }
 };

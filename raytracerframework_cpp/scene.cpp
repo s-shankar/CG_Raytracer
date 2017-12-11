@@ -282,3 +282,8 @@ void Scene::setMaxRecursionDepth(string depth)
 {
 	maxRecursionDepth = std::stoi(depth);
 }
+
+void Scene::setSuperSampling(string factor)
+{
+	super_sampling_factor = std::stoi(factor);
+}

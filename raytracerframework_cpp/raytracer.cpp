@@ -147,6 +147,9 @@ bool Raytracer::readScene(const std::string& inputFilename)
 			// Read if there is any any maxRecursiveDepth in file
 			scene->setMaxRecursionDepth(parseString(doc["MaxRecursionDepth"]));
 
+			// Enable super sampling or not
+			scene->setSuperSampling(doc["SuperSampling"]["factor"]);
+
             // Read scene configuration options
             scene->setEye(parseTriple(doc["Eye"]));
 			scene->setEyeNormalDirection(parseTriple(doc["EyeNormalDirection"]));
