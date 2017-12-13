@@ -22,6 +22,8 @@ SuperSampling:
 RenderMode: "phong"
 Shadows: false
 MaxRecursionDepth: 0
+Height: 800
+Width: 400
 
 Lights:
 - position: [-200,600,1500]
