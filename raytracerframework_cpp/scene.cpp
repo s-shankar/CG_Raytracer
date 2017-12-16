@@ -221,37 +221,26 @@ void Scene::render(Image &img)
 		*/
         for (int x = 0; x < w; x++) 
 		{
-			if (super_sampling_factor > 1)
+			// store list of colors for the pixel
+			std::vector<Color> sampleColorList;
+			double offset = 1.0 / (super_sampling_factor + 1);
+			for (unsigned int i = 0;i < super_sampling_factor;++i)
 			{
-				// store list of colors for the pixel
-				std::vector<Color> sampleColorList;
-				double offset = 1.0 / (super_sampling_factor + 1);
-				for (unsigned int i = 0;i < super_sampling_factor;++i)
+				for (unsigned int j = 0;j < super_sampling_factor;++j)
 				{
-					for (unsigned int j = 0;j < super_sampling_factor;++j)
-					{
-						Point pixel(x + i * offset, h - 1 - y + j * offset, 0);
-						Ray ray(eye, (pixel - eye).normalized());
-						Color col = trace(ray);
-						col.clamp();
-						sampleColorList.push_back(col);
-					}
+					Point pixel(x + i * offset, h - 1 - y + j * offset, 0);
+					Ray ray(eye, (pixel - eye).normalized());
+					Color col = trace(ray);
+					col.clamp();
+					sampleColorList.push_back(col);
 				}
-				Color ultimateColor(sampleColorList[0]);
-				for (unsigned int i = 1;i<sampleColorList.size();++i)
-					ultimateColor += sampleColorList[i];
-				ultimateColor /= factor;
-				ultimateColor.clamp();
-				img(x, y) = ultimateColor;
 			}
-			else
-			{
-				Point pixel(x + 0.5, h - 1 - y + 0.5, 0);
-				Ray ray(eye, (pixel - eye).normalized());
-				Color col = trace(ray);
-				col.clamp();
-				img(x, y) = col;
-			}
+			Color ultimateColor(sampleColorList[0]);
+			for (unsigned int i = 1;i<sampleColorList.size();++i)
+				ultimateColor += sampleColorList[i];
+			ultimateColor /= factor;
+			ultimateColor.clamp();
+			img(x, y) = ultimateColor;
         }
     }
 }
@@ -338,6 +327,6 @@ const int Scene::Height() const
 void Scene::setSuperSampling(string factor)
 {
 	size_t f = std::stoi(factor);
-	if(f>1)
+	if(f>0)
 		super_sampling_factor = f;
 }
