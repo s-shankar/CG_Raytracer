@@ -218,6 +218,7 @@ void Scene::render(Image &img)
 
 	double factor = (static_cast<double>(super_sampling_factor) * static_cast<double>(super_sampling_factor)) / 1.0;
 
+	#pragma omp parallel for
 	for (int y = 0; y < h; y++)
 	{
 		for (int x = 0; x < w; x++)
