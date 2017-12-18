@@ -15,15 +15,15 @@
 RenderMode: "phong"
 
 Camera:
-    eye: [200,200,1000]
-    center: [200,200,0]
-    up: [0.0,1,0.0]
+    eye: [1000,200,200]
+    center: [0,200,200]
+    up: [0,1,0]
     viewSize: [800,400]
 
 Shadows: true
 MaxRecursionDepth: 10
 SuperSampling:
-  factor: 4
+  factor: 1
 
 Lights:
 - position: [-200,600,1500]

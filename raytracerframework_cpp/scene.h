@@ -22,10 +22,11 @@
 #include "light.h"
 #include "object.h"
 #include "image.h"
+#include "camera.h"
 #include <Eigen/Dense>
 
 
-enum RenderMode 
+enum RenderMode
 {
 	phong,
 	zbuffer,
@@ -35,37 +36,40 @@ enum RenderMode
 class Scene
 {
 private:
-    std::vector<Object*> objects;
-    std::vector<Light*> lights;
-    Triple eye;
-	Vector eyeNormalDirection;
-	Vector eyeTopDirection;
+	std::vector<Object*> objects;
+	std::vector<Light*> lights;
+	Camera* camera;
+	//Eigen::Matrix4d changeOfBaseMatrix;
 	RenderMode renderMode;
-	int width, height;
-	Eigen::Matrix3d changeOfBaseMatrix;
 	bool shadows = false;
 	unsigned int maxRecursionDepth = 0;
-	unsigned int super_sampling_factor=1;
+	unsigned int super_sampling_factor = 1;
 public:
-    Color trace(const Ray &ray, unsigned int depth = 0 );
+	Color trace(const Ray &ray, unsigned int depth = 0);
 	bool getDistanceIntersection(const Ray &ray, const Ray &shadow, Point lightHit, Object &objet);
-    void render(Image &img);
-    void addObject(Object *o);
-    void addLight(Light *l);
-    void setEye(Triple e);
-	void setEyeNormalDirection(Triple e);
-	void setEyeTopDirection(Triple e);
+	void render(Image &img);
+	void addObject(Object *o);
+	void addLight(Light *l);
+
 	void setRenderMode(string renderMode_);
-	void setWidth(int w);
-	void setHeight(int l);
-	const int Width() const;
-	const int Height() const;
-	void createChangeOfBaseMatrix();
+
 	void setShadows(string shadow);
 	void setMaxRecursionDepth(string depth);
 	void setSuperSampling(string factor);
-    unsigned int getNumObjects() { return objects.size(); }
-    unsigned int getNumLights() { return lights.size(); }
+	unsigned int getNumObjects() { return objects.size(); }
+	unsigned int getNumLights() { return lights.size(); }
+
+	void setCamera(Camera *c);
+	const Point Eye() const;
+	const int Width() const;
+	const int Height() const;
+
+	void changeObjectsBase();
+	//void setBaseMatrix();
+	/*void setViewSize(int w, int h);
+	void setEye(Triple e);
+	void setEyeNormalDirection(Triple e);
+	void setEyeTopDirection(Triple e);*/
 };
 
 #endif /* end of include guard: SCENE_H_KNBLQLP6 */

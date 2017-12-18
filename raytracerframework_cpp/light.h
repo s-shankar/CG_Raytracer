@@ -21,44 +21,58 @@
 #include <iostream>
 #include <limits>
 #include "triple.h"
+#include <Eigen/Dense>
 
 class Light
 {
 public:
-    Light(Point pos,Color c) : position(pos), color(c)
-    { }
+	Light(Point pos, Color c) : position(pos), color(c)
+	{ }
 
-    Point position;
-    Color color;
+	void changeBase(const Eigen::Matrix4d &changeOfBaseMatrix)
+	{
+		position = (Point)position.matrixProduct(changeOfBaseMatrix);
+	}
+
+	Point position;
+	Color color;
 };
 
 class Ray
 {
 public:
-    Point O;
-    Vector D;
+	Point O;
+	Vector D;
 
-    Ray(const Point &from, const Vector &dir)
-        : O(from), D(dir)
-    { }
+	Ray(const Point &from, const Vector &dir)
+		: O(from), D(dir)
+	{ }
 
-    Point at(double t) const
-    { return O + t*D; }
+	/*void changeBase(const Eigen::Matrix4d &changeOfBaseMatrix)
+	{
+	O = (Point)O.matrixProduct(changeOfBaseMatrix);
+	D = (Vector)D.matrixProduct(changeOfBaseMatrix);
+	}*/
+
+	Point at(double t) const
+	{
+		return O + t*D;
+	}
 
 };
 
 class Hit
 {
 public:
-    double t;
-    Vector N;
-    bool no_hit;
-    
-    Hit(const double t, const Vector &normal, bool nohit = false)
-        : t(t), N(normal), no_hit(nohit)
-    { }
+	double t;
+	Vector N;
+	bool no_hit;
 
-    static const Hit NO_HIT() { static Hit no_hit(std::numeric_limits<double>::quiet_NaN(),Vector(std::numeric_limits<double>::quiet_NaN(),std::numeric_limits<double>::quiet_NaN(),std::numeric_limits<double>::quiet_NaN()), true); return no_hit; }
+	Hit(const double t, const Vector &normal, bool nohit = false)
+		: t(t), N(normal), no_hit(nohit)
+	{ }
+
+	static const Hit NO_HIT() { static Hit no_hit(std::numeric_limits<double>::quiet_NaN(), Vector(std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()), true); return no_hit; }
 
 };
 

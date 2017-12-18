@@ -24,7 +24,7 @@ public:
 		faces.push_back(Plane(centerOfCube + (-1) * normalSideFace * halfEdge, (-1) * normalSideFace));
 		faces.push_back(Plane(centerOfCube + (-1) * lastNormal * halfEdge, (-1) * lastNormal));
 
-		
+
 
 		Point p1 = centerOfCube + (halfEdge * faces[0].n + halfEdge * faces[1].n + halfEdge * faces[2].n);
 		Point p2 = p1 + (edge * faces[5].n);
@@ -48,7 +48,7 @@ public:
 
 	virtual Hit intersect(const Ray &ray);
 	virtual Intersection distanceToPlane(const Plane &plane);
-	void changeBase(const Eigen::Matrix3d &changeOfBaseMatrix);
+	void changeBase(const Eigen::Matrix4d &changeOfBaseMatrix);
 
 	Point centerOfCube;
 	std::vector<Point> vertex;

@@ -22,208 +22,208 @@ using namespace std;
 
 class Triple {
 public:
-    explicit Triple(double X = 0, double Y = 0, double Z = 0)
-        : x(X), y(Y), z(Z)
-    {
-    }
+	explicit Triple(double X = 0, double Y = 0, double Z = 0)
+		: x(X), y(Y), z(Z)
+	{
+	}
 
-    Triple operator+(const Triple &t) const
-    {
-        return Triple(x+t.x, y+t.y, z+t.z);
-    }
+	Triple operator+(const Triple &t) const
+	{
+		return Triple(x + t.x, y + t.y, z + t.z);
+	}
 
-    Triple operator+(double f) const
-    {
-        return Triple(x+f, y+f, z+f);
-    }
+	Triple operator+(double f) const
+	{
+		return Triple(x + f, y + f, z + f);
+	}
 
-    friend Triple operator+(double f, const Triple &t)
-    {
-        return Triple(f+t.x, f+t.y, f+t.z);
-    }
+	friend Triple operator+(double f, const Triple &t)
+	{
+		return Triple(f + t.x, f + t.y, f + t.z);
+	}
 
-    Triple operator-() const
-    {
-        return Triple( -x, -y, -z);
-    }
+	Triple operator-() const
+	{
+		return Triple(-x, -y, -z);
+	}
 
-    Triple operator-(const Triple &t) const
-    {
-        return Triple(x-t.x, y-t.y, z-t.z);
-    }
+	Triple operator-(const Triple &t) const
+	{
+		return Triple(x - t.x, y - t.y, z - t.z);
+	}
 
-    Triple operator-(double f) const
-    {
-        return Triple(x-f, y-f, z-f);
-    }
+	Triple operator-(double f) const
+	{
+		return Triple(x - f, y - f, z - f);
+	}
 
-    friend Triple operator-(double f, const Triple &t)
-    {
-        return Triple(f-t.x, f-t.y, f-t.z);
-    }
+	friend Triple operator-(double f, const Triple &t)
+	{
+		return Triple(f - t.x, f - t.y, f - t.z);
+	}
 
-    Triple operator*(const Triple &t) const
-    {
-        return Triple(x*t.x,y*t.y,z*t.z);
-    }
+	Triple operator*(const Triple &t) const
+	{
+		return Triple(x*t.x, y*t.y, z*t.z);
+	}
 
-    Triple operator*(double f) const
-    {
-        return Triple(x*f, y*f, z*f);
-    }
+	Triple operator*(double f) const
+	{
+		return Triple(x*f, y*f, z*f);
+	}
 
-    friend Triple operator*(double f, const Triple &t)
-    {
-        return Triple(f*t.x, f*t.y, f*t.z);
-    }
+	friend Triple operator*(double f, const Triple &t)
+	{
+		return Triple(f*t.x, f*t.y, f*t.z);
+	}
 
-    Triple operator/(double f) const
-    {
-        double invf = 1.0/f;
-        return Triple(x*invf, y*invf, z*invf);
-    }
+	Triple operator/(double f) const
+	{
+		double invf = 1.0 / f;
+		return Triple(x*invf, y*invf, z*invf);
+	}
 
-    Triple& operator+=(const Triple &t)
-    {
-        x += t.x;
-        y += t.y;
-        z += t.z;
-        return *this;
-    }
+	Triple& operator+=(const Triple &t)
+	{
+		x += t.x;
+		y += t.y;
+		z += t.z;
+		return *this;
+	}
 
-    Triple& operator+=(double f)
-    {
-        x += f;
-        y += f;
-        z += f;
-        return *this;
-    }
+	Triple& operator+=(double f)
+	{
+		x += f;
+		y += f;
+		z += f;
+		return *this;
+	}
 
-    Triple& operator-=(const Triple &t)
-    {
-        x -= t.x;
-        y -= t.y;
-        z -= t.z;
-        return *this;
-    }
+	Triple& operator-=(const Triple &t)
+	{
+		x -= t.x;
+		y -= t.y;
+		z -= t.z;
+		return *this;
+	}
 
-    Triple& operator-=(double f)
-    {
-        x -= f;
-        y -= f;
-        z -= f;
-        return *this;
-    }
+	Triple& operator-=(double f)
+	{
+		x -= f;
+		y -= f;
+		z -= f;
+		return *this;
+	}
 
-    Triple& operator*=(const double f)
-    {
-        x *= f;
-        y *= f;
-        z *= f;
-        return *this;
-    }
+	Triple& operator*=(const double f)
+	{
+		x *= f;
+		y *= f;
+		z *= f;
+		return *this;
+	}
 
-    Triple& operator/=(const double f)
-    {
-        double invf = 1.0/f;
-        x *= invf;
-        y *= invf;
-        z *= invf;
-        return *this;
-    }
+	Triple& operator/=(const double f)
+	{
+		double invf = 1.0 / f;
+		x *= invf;
+		y *= invf;
+		z *= invf;
+		return *this;
+	}
 
-    double dot(const Triple &t) const
-    {
-        return x*t.x + y*t.y + z*t.z;
-    }
+	double dot(const Triple &t) const
+	{
+		return x*t.x + y*t.y + z*t.z;
+	}
 
-    Triple cross(const Triple &t) const
-    {
-        return Triple( y*t.z - z*t.y,
-            z*t.x - x*t.z,
-            x*t.y - y*t.x);
-    }
+	Triple cross(const Triple &t) const
+	{
+		return Triple(y*t.z - z*t.y,
+			z*t.x - x*t.z,
+			x*t.y - y*t.x);
+	}
 
-	const Triple matrixProduct(const Eigen::Matrix3d &changeOfBaseMatrix) const
+	const Triple matrixProduct(const Eigen::Matrix4d &changeOfBaseMatrix) const
 	{
 		Triple res;
-		res.x = changeOfBaseMatrix(0, 0) * x + changeOfBaseMatrix(1, 0) * y + changeOfBaseMatrix(2, 0) * z;
-		res.y = changeOfBaseMatrix(0, 1) * x + changeOfBaseMatrix(1, 1) * y + changeOfBaseMatrix(2, 1) * z;
-		res.z = changeOfBaseMatrix(0, 2) * x + changeOfBaseMatrix(1, 2) * y + changeOfBaseMatrix(2, 2) * z;
+		res.x = changeOfBaseMatrix(0, 0) * x + changeOfBaseMatrix(0, 1) * y + changeOfBaseMatrix(0, 2) * z + changeOfBaseMatrix(0, 3) /* * 1 */;
+		res.y = changeOfBaseMatrix(1, 0) * x + changeOfBaseMatrix(1, 1) * y + changeOfBaseMatrix(1, 2) * z + changeOfBaseMatrix(1, 3) /* * 1 */;
+		res.z = changeOfBaseMatrix(2, 0) * x + changeOfBaseMatrix(2, 1) * y + changeOfBaseMatrix(2, 2) * z /*+ changeOfBaseMatrix(2, 3) == 1*/ /* * 1 */;
 
 		return res;
 	}
 
-    double length() const
-    {
-        return sqrt(length_2());
-    }
+	double length() const
+	{
+		return sqrt(length_2());
+	}
 
-    double length_2() const
-    {
-        return x*x + y*y + z*z;
-    }
+	double length_2() const
+	{
+		return x*x + y*y + z*z;
+	}
 
-    Triple normalized() const
-    {
-        return (*this) / length();
-    }
+	Triple normalized() const
+	{
+		return (*this) / length();
+	}
 
-    void normalize()
-    {
-        double l = length();
-        double invl = 1/l;
-        x *= invl;
-        y *= invl;
-        z *= invl;
-    }	
+	void normalize()
+	{
+		double l = length();
+		double invl = 1 / l;
+		x *= invl;
+		y *= invl;
+		z *= invl;
+	}
 
-    friend istream& operator>>(istream &s, Triple &v);
-    friend ostream& operator<<(ostream &s, const Triple &v);
+	friend istream& operator >> (istream &s, Triple &v);
+	friend ostream& operator<<(ostream &s, const Triple &v);
 
-    // Functions for when used as a Color:
-    void set(double f)
-    {
-        r = g = b = f;
-    }
+	// Functions for when used as a Color:
+	void set(double f)
+	{
+		r = g = b = f;
+	}
 
-    void set(double f, double maxValue)
-    {
-        set(f/maxValue);
-    }
+	void set(double f, double maxValue)
+	{
+		set(f / maxValue);
+	}
 
-    void set(double red, double green, double blue)
-    {
-        r = red;
-        g = green;
-        b = blue;
-    }
+	void set(double red, double green, double blue)
+	{
+		r = red;
+		g = green;
+		b = blue;
+	}
 
-    void set(double r, double g, double b, double maxValue)
-    {
-        set(r/maxValue,g/maxValue,b/maxValue);
-    }
+	void set(double r, double g, double b, double maxValue)
+	{
+		set(r / maxValue, g / maxValue, b / maxValue);
+	}
 
-    void clamp(double maxValue = 1.0)
-    {
-        if (r > maxValue) r = maxValue;
-        if (g > maxValue) g = maxValue;
-        if (b > maxValue) b = maxValue;
-    }
+	void clamp(double maxValue = 1.0)
+	{
+		if (r > maxValue) r = maxValue;
+		if (g > maxValue) g = maxValue;
+		if (b > maxValue) b = maxValue;
+	}
 
-    union {
-        double data[3];
-        struct {
-            double x;
-            double y;
-            double z;
-        };
-        struct {
-            double r;
-            double g;
-            double b;
-        };
-    };
+	union {
+		double data[3];
+		struct {
+			double x;
+			double y;
+			double z;
+		};
+		struct {
+			double r;
+			double g;
+			double b;
+		};
+	};
 };
 
 typedef Triple Color;

@@ -23,40 +23,40 @@
 
 Hit Sphere::intersect(const Ray &ray)
 {
-    /****************************************************
-    * RT1.1: INTERSECTION CALCULATION
-    *
-    * Given: ray, position, r
-    * Sought: intersects? if true: *t
-    * 
-    * Insert calculation of ray/sphere intersection here. 
-    *
-    * You have the sphere's center (C) and radius (r) as well as
-    * the ray's origin (ray.O) and direction (ray.D).
-    *
-    * If the ray does not intersect the sphere, return Hit::NO_HIT().
-    * Otherwise, return an instance of Hit() with the distance of the
-    * intersection point from the ray origin as t and the normal ad N (see example).
-    ****************************************************/
+	/****************************************************
+	* RT1.1: INTERSECTION CALCULATION
+	*
+	* Given: ray, position, r
+	* Sought: intersects? if true: *t
+	*
+	* Insert calculation of ray/sphere intersection here.
+	*
+	* You have the sphere's center (C) and radius (r) as well as
+	* the ray's origin (ray.O) and direction (ray.D).
+	*
+	* If the ray does not intersect the sphere, return Hit::NO_HIT().
+	* Otherwise, return an instance of Hit() with the distance of the
+	* intersection point from the ray origin as t and the normal ad N (see example).
+	****************************************************/
 
-    // place holder for actual intersection calculation
+	// place holder for actual intersection calculation
 
 	Vector OC = (position - ray.O);
-    Vector OCn = OC.normalized();
+	Vector OCn = OC.normalized();
 	double cosAlpha = OCn.dot(ray.D); //here alpha is the angle formed by the vectors CO and D
 
-	/*case where the ray is directed behind the direction of the sphere*/
-    if (acos(cosAlpha) < 0)
-        return Hit::NO_HIT();
-    
+									  /*case where the ray is directed behind the direction of the sphere*/
+	if (acos(cosAlpha) < 0)
+		return Hit::NO_HIT();
+
 	double OClength = OC.length();
 	double sinBeta = r / OClength; //beta is the maximum angle alpha can have to touch the sphere, where the ray is tangent to the sphere
 
-	if(acos(cosAlpha) > asin(sinBeta))
+	if (acos(cosAlpha) > asin(sinBeta))
 		return Hit::NO_HIT();
 
 	//if we are here, we know the ray intersects the sphere
-	
+
 	/****************************************************
 	* calculations based on al-Kashi theorem
 	*
@@ -73,12 +73,12 @@ Hit Sphere::intersect(const Ray &ray)
 	double t, b = -2 * OClength*cosAlpha;
 
 	double delta = b*b + 4 * (r*r - OClength*OClength);
-	
+
 	//just in case
-	if(delta < 0)
+	if (delta < 0)
 		return Hit::NO_HIT();
 
-	t = (-b - sqrt(delta))/2;
+	t = (-b - sqrt(delta)) / 2;
 	double t2 = (-b + sqrt(delta)) / 2;
 
 	if (t2 < t)
@@ -86,20 +86,20 @@ Hit Sphere::intersect(const Ray &ray)
 
 	if (t < 0.0)
 		return Hit::NO_HIT();
-    /****************************************************
-    * RT1.2: NORMAL CALCULATION
-    *
-    * Given: t, C, r
-    * Sought: N
-    * 
-    * Insert calculation of the sphere's normal at the intersection point.
-    ****************************************************/
+	/****************************************************
+	* RT1.2: NORMAL CALCULATION
+	*
+	* Given: t, C, r
+	* Sought: N
+	*
+	* Insert calculation of the sphere's normal at the intersection point.
+	****************************************************/
 
 
 	Point intersectionPoint = ray.at(t);
-    Vector N = -1 * (position - intersectionPoint) / r;
+	Vector N = -1 * (position - intersectionPoint) / r;
 
-    return Hit(t,N);
+	return Hit(t, N);
 }
 
 Intersection Sphere::distanceToPlane(const Plane &plane)
@@ -108,7 +108,7 @@ Intersection Sphere::distanceToPlane(const Plane &plane)
 	return Intersection(distance, position + r * plane.n);
 }
 
-void Sphere::changeBase(const Eigen::Matrix3d &changeOfBaseMatrix)
+void Sphere::changeBase(const Eigen::Matrix4d &changeOfBaseMatrix)
 {
 	position = (Point)position.matrixProduct(changeOfBaseMatrix);
 }

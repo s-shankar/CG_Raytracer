@@ -10,7 +10,7 @@ public:
 
 	virtual Hit intersect(const Ray &ray);
 	virtual Intersection distanceToPlane(const Plane &plane);
-	virtual void changeBase(const Eigen::Matrix3d &changeOfBaseMatrix);
+	virtual void changeBase(const Eigen::Matrix4d &changeOfBaseMatrix);
 
 	double operator-(const Plane &plane);
 	double distance(const Point &point) const;
@@ -22,7 +22,7 @@ public:
 class Intersection
 {
 public:
-	Intersection() : t(0), p(Point(0,0,0)) {}
+	Intersection() : t(0), p(Point(0, 0, 0)) {}
 	Intersection(double t_, Point p_) : t(t_), p(p_) {}
 
 	double t;

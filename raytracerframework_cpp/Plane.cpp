@@ -4,7 +4,7 @@
 
 Hit Plane::intersect(const Ray &ray)
 {
-	double nDotD = n.dot(ray.D); 
+	double nDotD = n.dot(ray.D);
 
 	if (nDotD <= 0)
 		return Hit::NO_HIT();
@@ -36,7 +36,7 @@ Hit Plane::intersect(const Ray &ray)
 
 double Plane::operator-(const Plane &plane)
 {
-	if(abs(n.dot(plane.n)) != 1)
+	if (abs(n.dot(plane.n)) != 1)
 		return 0;
 
 	return (p - plane.p).dot(n) / plane.n.dot(n);
@@ -52,10 +52,10 @@ Intersection Plane::distanceToPlane(const Plane &plane)
 
 double Plane::distance(const Point &point) const
 {
-	return abs(point.dot(n) - p.dot(n))/ n.length();
+	return abs(point.dot(n) - p.dot(n)) / n.length();
 }
 
-void Plane::changeBase(const Eigen::Matrix3d &changeOfBaseMatrix)
+void Plane::changeBase(const Eigen::Matrix4d &changeOfBaseMatrix)
 {
 	p = (Point)p.matrixProduct(changeOfBaseMatrix);
 	n = (Vector)n.matrixProduct(changeOfBaseMatrix);
