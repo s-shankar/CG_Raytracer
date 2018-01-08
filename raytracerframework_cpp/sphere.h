@@ -27,6 +27,7 @@ public:
 	virtual Hit intersect(const Ray &ray);
 	virtual Intersection distanceToPlane(const Plane &plane);
 	void Sphere::changeBase(const Eigen::Matrix4d &changeOfBaseMatrix);
+	virtual Color getColor(Point p);
 
 	/*const*/ Point position;
 	const double r;

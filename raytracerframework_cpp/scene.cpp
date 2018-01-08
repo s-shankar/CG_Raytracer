@@ -17,6 +17,7 @@
 
 #include <iostream>
 #include <string>
+#include <omp.h>
 #include "scene.h"
 #include "material.h"
 #include "plane.h"
@@ -67,6 +68,7 @@ Color Scene::trace(const Ray &ray, unsigned int depth)
 		Vector L, R;
 
 		Color color;
+		Color materialColor = obj->getColor(hit);
 
 		//ambiant member
 		double ambiant = 0;
@@ -116,7 +118,7 @@ Color Scene::trace(const Ray &ray, unsigned int depth)
 					specular += pow(rdotv, material->n) * lights.at(i)->color;
 			}
 
-			color = (ambiant + diffuse*material->kd)*material->color + specular*material->ks;
+			color = (ambiant + diffuse*material->kd)*materialColor + specular*material->ks;
 		}
 
 		if (depth < maxRecursionDepth)
@@ -135,7 +137,75 @@ Color Scene::trace(const Ray &ray, unsigned int depth)
 		return color;
 	}
 
-	if (renderMode == RenderMode::zbuffer)
+	else if (renderMode == RenderMode::gooch)
+	{
+		Vector L, R;
+		Color color;
+		Color materialColor = obj->material->color;
+
+		double ambiant = 0;
+		Color diffuse, specular, kCool(0, 0, b), kWarm(y,y,0), kCoolDiff, kWarmDiff;
+		bool shdw;
+
+		for (size_t i = 0; i < lights.size(); ++i)
+		{
+			/* Light vector given by the distance between
+			the Light Point and Object hit Point. */
+			L = (lights.at(i)->position - hit).normalized();
+
+			shdw = false;
+			if (shadows)
+			{
+				/* get shadow ray and see if it intersects another object for shadow*/
+				//Ray shadowRay(hit, L);
+				shdw = getDistanceIntersection(ray, Ray(hit, L), hit, *obj);
+			}
+
+			ambiant = material->ka;
+
+			if (!shdw)
+			{
+				double ldotn = L.dot(N);
+				// diffusion  : (L.N)
+				if (ldotn >= 0)
+					diffuse += ldotn * lights.at(i)->color;
+
+				// R = 2(N.L)N - L
+				R = (2 * ldotn * N - L).normalized();
+
+				// specular : (R.V)^alpha
+				double rdotv = R.dot(V);
+				if (rdotv >= 0)
+					specular += pow(rdotv, material->n) * lights.at(i)->color * material->ks;
+			}
+
+			/* kCoolDiff = kCool + alpha* kd
+				KWarmDiff  = KWarm + beta * kd */
+			kCoolDiff += kCool + alpha * (lights[i]->color * materialColor * material->kd);
+			kWarmDiff += kWarm + beta * (lights[i]->color *  materialColor * material->kd);
+
+			// kfinal = (1 + N.L)/2  * kCoolDiff + (1-(1+N.L)/2) * kWarmDiff 
+			color += kCoolDiff* ((1 - N.dot(L)) / 2) + kWarmDiff* ((1 + N.dot(L)) / 2) + specular * material->ks;
+		}
+
+		if (depth < maxRecursionDepth)
+		{
+			/*
+			*  Reflection ray dir = Incident ray dir - 2 * (incident ray dir dot surface normal) * surface normal
+			* 	R = I - 2*cos(theta)*N
+			*/
+			Vector reflectionVector(ray.D - (2 * (ray.D.dot(N))*N));
+			Ray reflectionRay(hit, reflectionVector);
+			// Call recursively in order to get correct reflection color
+			Color reflectionColor = trace(reflectionRay, depth + 1);
+			color += reflectionColor * material->ks;
+		}
+
+		return color;
+
+	}
+
+	else if (renderMode == RenderMode::zbuffer)
 	{
 		Plane	farClippingPlane(Point(0, 0, 0), camera->eyeNormalDirection),
 			maxNearClippingPlane(camera->Eye(), camera->eyeNormalDirection);
@@ -171,7 +241,7 @@ Color Scene::trace(const Ray &ray, unsigned int depth)
 		return color;
 	}
 
-	if (renderMode == RenderMode::normal)
+	else if (renderMode == RenderMode::normal)
 	{
 		return (N + Vector(1, 1, 1)) / 2;
 	}
@@ -299,6 +369,9 @@ void Scene::setRenderMode(string renderMode_)
 	if (renderMode_ == "phong")
 		renderMode = phong;
 
+	if (renderMode_ == "gooch")
+		renderMode = gooch;
+
 	if (renderMode_ == "zbuffer")
 		renderMode = zbuffer;
 
@@ -345,6 +418,26 @@ void Scene::setSuperSampling(string factor)
 	size_t f = std::stoi(factor);
 	if (f>0)
 		super_sampling_factor = f;
+}
+
+void Scene::setB(double nb)
+{
+	b = nb;
+}
+
+void Scene::setY(double ny)
+{
+	y = ny;
+}
+
+void Scene::setAlpha(double nAlpha)
+{
+	alpha = nAlpha;
+}
+
+void Scene::setBeta(double nBeta)
+{
+	beta = nBeta;
 }
 
 void Scene::changeObjectsBase()

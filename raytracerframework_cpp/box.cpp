@@ -1,5 +1,6 @@
 #include "box.h"
 #include "sphere.h"
+#include "material.h"
 
 Hit Box::intersect(const Ray & ray)
 {
@@ -150,4 +151,11 @@ void Box::changeBase(const Eigen::Matrix4d &changeOfBaseMatrix)
 	{
 		faces[i].changeBase(changeOfBaseMatrix);
 	}
+}
+
+Color Box::getColor(Point p)
+{
+	if (material->texture == NULL)
+		return material->color;
+	return material->texture->colorAt(0.5,0.5);
 }

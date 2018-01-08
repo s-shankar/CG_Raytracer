@@ -14,8 +14,10 @@
 //  Bert Freudenberg that can be found at
 //  http://isgwww.cs.uni-magdeburg.de/graphik/lehre/cg2/projekt/rtprojekt.html 
 //
+#define _USE_MATH_DEFINES
 
 #include "sphere.h"
+#include "material.h"
 #include <iostream>
 #include <math.h>
 
@@ -111,4 +113,33 @@ Intersection Sphere::distanceToPlane(const Plane &plane)
 void Sphere::changeBase(const Eigen::Matrix4d &changeOfBaseMatrix)
 {
 	position = (Point)position.matrixProduct(changeOfBaseMatrix);
+}
+
+Color Sphere::getColor(Point p)
+{
+	if (this->material->texture == NULL)
+		return material->color;
+	
+	// get point into spherical coordinates
+	Vector translation = p-position;
+	double rho=0.0, nTheta=0.0, nPhi=0.0;
+	rho = translation.length();
+	nTheta = atan2(translation.y, translation.x) + theta;
+	nPhi = acos(translation.z / rho);
+
+	// getting the spherical coordonates
+	double x_rotate = 0.0, y_rotate = 0.0, z_rotate = 0.0;
+	x_rotate = rho * cos(nTheta)*cos(nPhi);
+	y_rotate = rho * sin(nTheta)*cos(nPhi);
+	z_rotate = rho * sin(nPhi);
+
+	Vector rotateVector(x_rotate, y_rotate, z_rotate);
+	rotateVector += position;
+	Vector normalizedRotateVector = (this->position - rotateVector).normalized();
+	// sphere texture mapping using u-v, bounded by [0,1] & [0,1]
+	double u, v;
+	u = 0.5 + atan2(normalizedRotateVector.x,normalizedRotateVector.y)/(2*M_PI);
+	v = 0.5 + asin(normalizedRotateVector.z) / M_PI;
+	
+	return this->material->texture->colorAt(u,v);
 }

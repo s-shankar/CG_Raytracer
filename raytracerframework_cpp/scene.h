@@ -29,6 +29,7 @@
 enum RenderMode
 {
 	phong,
+	gooch,
 	zbuffer,
 	normal
 };
@@ -44,6 +45,8 @@ private:
 	bool shadows = false;
 	unsigned int maxRecursionDepth = 0;
 	unsigned int super_sampling_factor = 1;
+	double b = 0.0, y = 0.0;
+	double alpha = 0.0, beta = 0.0;
 public:
 	Color trace(const Ray &ray, unsigned int depth = 0);
 	bool getDistanceIntersection(const Ray &ray, const Ray &shadow, Point lightHit, Object &objet);
@@ -56,6 +59,10 @@ public:
 	void setShadows(string shadow);
 	void setMaxRecursionDepth(string depth);
 	void setSuperSampling(string factor);
+	void setB(double nb);
+	void setY(double ny);
+	void setAlpha(double nAlpha);
+	void setBeta(double nBeta);
 	unsigned int getNumObjects() { return objects.size(); }
 	unsigned int getNumLights() { return lights.size(); }
 

@@ -49,6 +49,7 @@ public:
 	virtual Hit intersect(const Ray &ray);
 	virtual Intersection distanceToPlane(const Plane &plane);
 	void changeBase(const Eigen::Matrix4d &changeOfBaseMatrix);
+	virtual Color getColor(Point p);
 
 	Point centerOfCube;
 	std::vector<Point> vertex;

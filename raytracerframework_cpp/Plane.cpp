@@ -1,4 +1,5 @@
 #include "plane.h"
+#include "material.h"
 #include <iostream>
 #include <math.h>
 
@@ -59,4 +60,11 @@ void Plane::changeBase(const Eigen::Matrix4d &changeOfBaseMatrix)
 {
 	p = (Point)p.matrixProduct(changeOfBaseMatrix);
 	n = (Vector)n.matrixProduct(changeOfBaseMatrix);
+}
+
+Color Plane::getColor(Point p)
+{
+	if (this->material->texture == NULL)
+		return material->color;
+	return material->texture->colorAt(0.5,0.5);
 }

@@ -11,6 +11,7 @@ public:
 	virtual Hit intersect(const Ray &ray);
 	virtual Intersection distanceToPlane(const Plane &plane);
 	virtual void changeBase(const Eigen::Matrix4d &changeOfBaseMatrix);
+	virtual Color getColor(Point p);
 
 	double operator-(const Plane &plane);
 	double distance(const Point &point) const;

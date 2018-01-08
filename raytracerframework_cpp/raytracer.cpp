@@ -73,7 +73,17 @@ int parseHeight(const YAML::Node& node)
 Material* Raytracer::parseMaterial(const YAML::Node& node)
 {
 	Material *m = new Material();
-	node["color"] >> m->color;
+	if (node.FindValue("texture") != 0)
+	{
+		std::string texturePath;
+		node["texture"] >> texturePath;
+		std::cout << "Texture detected : " << texturePath << std::endl;
+		m->texture = new Image(texturePath.c_str());
+	}
+	else
+	{
+		node["color"] >> m->color;
+	}
 	node["ka"] >> m->ka;
 	node["kd"] >> m->kd;
 	node["ks"] >> m->ks;
@@ -129,6 +139,10 @@ Object* Raytracer::parseObject(const YAML::Node& node)
 	if (returnObject) {
 		// read the material and attach to object
 		returnObject->material = parseMaterial(node["material"]);
+		if (node.FindValue("rotation") != 0)
+		{
+			returnObject->setRotate(node["rotation"][0], node["rotation"][1],node["rotation"][2]);
+		}
 	}
 
 	return returnObject;
@@ -168,14 +182,26 @@ bool Raytracer::readScene(const std::string& inputFilename)
 			scene->setRenderMode(parseString(doc["RenderMode"]));
 			//scene->setViewSize(parseInt(doc["Width"]), parseInt(doc["Height"]));
 
+			// if any gooch parameters
+			if (doc.FindValue("GoochParameters"))
+			{
+				scene->setB(doc["GoochParameters"]["b"]);
+				scene->setY(doc["GoochParameters"]["y"]);
+				scene->setAlpha(doc["GoochParameters"]["alpha"]);
+				scene->setBeta(doc["GoochParameters"]["beta"]);
+			}
+
 			// Read if shadow mode is enabled
-			scene->setShadows(parseString(doc["Shadows"]));
+			if(doc.FindValue("Shadows") !=0)
+				scene->setShadows(parseString(doc["Shadows"]));
 
 			// Read if there is any any maxRecursiveDepth in file
-			scene->setMaxRecursionDepth(parseString(doc["MaxRecursionDepth"]));
+			if (doc.FindValue("MaxRecursionDepth") != 0)
+				scene->setMaxRecursionDepth(parseString(doc["MaxRecursionDepth"]));
 
 			// Enable super sampling or not
-			scene->setSuperSampling(doc["SuperSampling"]["factor"]);
+			if (doc.FindValue("SuperSampling") != 0)
+				scene->setSuperSampling(doc["SuperSampling"]["factor"]);
 
 			// Read scene configuration options
 
