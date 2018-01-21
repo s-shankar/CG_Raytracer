@@ -16,6 +16,7 @@
 #include "raytracer.h"
 #include "object.h"
 #include "sphere.h"
+#include "triangle.h"
 #include "box.h"
 #include "material.h"
 #include "light.h"
@@ -111,6 +112,16 @@ Object* Raytracer::parseObject(const YAML::Node& node)
 		node["radius"] >> r;
 		Sphere *sphere = new Sphere(pos, r);
 		returnObject = sphere;
+	}
+
+	if (objectType == "triangle")
+	{
+		Point p1, p2, p3;
+		node["p1"] >> p1;
+		node["p2"] >> p2;
+		node["p3"] >> p3;
+		Triangle *triangle = new Triangle(p1, p2, p3);
+		returnObject = triangle;
 	}
 
 	if (objectType == "plane") {
