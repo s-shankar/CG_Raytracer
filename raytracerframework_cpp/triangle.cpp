@@ -43,6 +43,8 @@ void Triangle::changeBase(const Eigen::Matrix4d & changeOfBaseMatrix)
 
 Color Triangle::getColor(Point p)
 {
+	if (material == nullptr)
+		return Color(0.4, 0.4, 0.7);
 	return material->color;
 }
 

@@ -14,6 +14,7 @@ Mesh::Mesh(float s, Point pos, std::string pathname) : scale(s), position(pos), 
 	// convert model into triangles for scene
 	GLMgroup *group = model->groups;
 	int nbTriangle = model->numtriangles;
+
 	while (group)
 	{
 		for (int i = 0; i < nbTriangle;++i)
@@ -30,6 +31,7 @@ Mesh::Mesh(float s, Point pos, std::string pathname) : scale(s), position(pos), 
 			p3 += position;
 
 			Triangle* tr = new Triangle(p1, p2, p3);
+			Material* mat = nullptr;
 
 			// if there is any texture or defined color for the face, get it , 
 			// otherwise use the one from the yaml file

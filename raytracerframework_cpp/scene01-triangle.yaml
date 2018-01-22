@@ -21,9 +21,9 @@ Camera:
     viewSize: [800,400]
 
 Shadows: true
-MaxRecursionDepth: 10
+MaxRecursionDepth: 2
 SuperSampling:
-  factor: 4
+  factor: 1
 
 Lights:
 - position: [-200,600,1500]
@@ -33,7 +33,7 @@ Lights:
 
 Objects:
 - type: sphere
-  position: [90,320,100]
+  position: [10,320,100]
   radius: 50
   material: # blue
     color: [0.0,0.0,1.0]
@@ -42,7 +42,7 @@ Objects:
     ks: 0.5
     n: 64
 - type: sphere
-  position: [210,270,300]
+  position: [10,170,100]
   radius: 50
   material: # green
     color: [0.0,1.0,0.0]
@@ -51,7 +51,7 @@ Objects:
     ks: 0.5
     n: 8
 - type: sphere
-  position: [290,170,150]
+  position: [310,320,150]
   radius: 50
   material: # red
     color: [1.0,0.0,0.0]
@@ -70,7 +70,7 @@ Objects:
     ks: 0
     n: 1
 - type: sphere
-  position: [110,130,200]
+  position: [310,110,200]
   radius: 50
   material: # orange
     color: [1.0,0.5,0.0]

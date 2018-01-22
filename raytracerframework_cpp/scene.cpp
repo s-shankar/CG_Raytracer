@@ -85,8 +85,8 @@ Color Scene::trace(const Ray &ray, unsigned int depth)
 		*
 		*	Assuming the intensity properties of the Object are all equal to 1.
 		*/
-
-		for (size_t i = 0; i < lights.size(); i++)
+		#pragma omp parallel for
+		for (int i = 0; i < lights.size(); i++)
 		{
 			/* Light vector given by the distance between
 			the Light Point and Object hit Point. */
