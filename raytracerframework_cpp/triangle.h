@@ -26,5 +26,6 @@ public :
 	virtual Intersection distanceToPlane(const Plane &plane);
 	void Triangle::changeBase(const Eigen::Matrix4d &changeOfBaseMatrix);
 	virtual Color getColor(Point p);
+	~Triangle();
 };
 #endif // TRIANGLE_H

@@ -21,6 +21,7 @@
 #include "material.h"
 #include "light.h"
 #include "image.h"
+#include "mesh.h"
 #include "yaml/yaml.h"
 #include <ctype.h>
 #include <fstream>
@@ -145,6 +146,21 @@ Object* Raytracer::parseObject(const YAML::Node& node)
 		node["normalSideFace"] >> normalSideFace;
 		Box *box = new Box(pos, e, normalUpFace, normalSideFace);
 		returnObject = box;
+	}
+
+	if (objectType == "OBJ")
+	{
+		std::string filename;
+		node["filename"] >> filename;
+		float scale;
+		node["scale"] >> scale;
+		Point position;
+		node["position"] >> position;
+		Mesh *mesh = new Mesh(scale,position,filename);
+		mesh->triangles.begin();
+		for (std::vector<Triangle*>::iterator it = mesh->triangles.begin(); it != mesh->triangles.end(); ++it)
+			scene->addObject((*it));
+		returnObject = mesh;
 	}
 
 	if (returnObject) {

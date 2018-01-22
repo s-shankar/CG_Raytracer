@@ -103,6 +103,16 @@ extern "C" {
 	} GLMmodel;
 
 
+	unsigned int glmFindMaterial(GLMmodel* model, char* name);
+
+
+	/* glmReadMTL: read a wavefront material library file
+	*
+	* model - properly initialized GLMmodel structure
+	* name  - name of the material library
+	*/
+	static void glmReadMTL(GLMmodel* model, char* name);
+
 	/* glmUnitize: "unitize" a model by translating it to the origin and
 	* scaling it to fit in a unit cube around the origin.  Returns the
 	* scalefactor used.

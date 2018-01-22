@@ -45,3 +45,7 @@ Color Triangle::getColor(Point p)
 {
 	return material->color;
 }
+
+Triangle::~Triangle()
+{
+}
