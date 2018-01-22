@@ -70,8 +70,8 @@ Objects:
     n: 8
 - type: OBJ
   filename: Doraemon.obj
-  position: [140,220,400]
-  scale: 100
+  position: [380,110,150]
+  scale: 75
   material: # blue
     color: [0.0,0.0,1.0]
     ka: 0.2

@@ -8,7 +8,7 @@
 Mesh::Mesh(float s, Point pos, std::string pathname) : scale(s), position(pos), filename(pathname)
 {
 	GLMmodel* model = glmReadOBJ((char*)filename.c_str());
-	std::cout << "Model : " << model->pathname << std::endl << "mtl: " << model->mtllibname<<std::endl<<"vertices : "<< model->numvertices<<std::endl<<"Triangles : "<<model->numtriangles<<"materials : "<<model->nummaterials<<std::endl<<"position: "<<model->position[0]<<" , "<< model->position[1]<<" , "<< model->position[2]<<std::endl;
+	std::cout << "Model : " << model->pathname << std::endl << "mtl: " << model->pathname<<std::endl<<"vertices : "<< model->numvertices<<std::endl<<"Triangles : "<<model->numtriangles<<"materials : "<<model->nummaterials<<std::endl<<"position: "<<model->position[0]<<" , "<< model->position[1]<<" , "<< model->position[2]<<std::endl;
 	glmScale(model, scale);
 
 	// convert model into triangles for scene
@@ -36,18 +36,21 @@ Mesh::Mesh(float s, Point pos, std::string pathname) : scale(s), position(pos), 
 			// if there is any texture or defined color for the face, get it , 
 			// otherwise use the one from the yaml file
 
-			std::string mtlGroupName = std::string(group->name);
-			int nMaterial = glmFindMaterial(model, (char*)mtlGroupName.c_str());
-			if (nMaterial)
+			if (model->nummaterials > 0)
 			{
-				GLMmaterial m = model->materials[nMaterial];
-				Material *material = new Material();
-				material->ka = m.ambient[0];
-				material->kd = m.diffuse[0];
-				material->ks = m.specular[0];
-				material->color = Color(m.diffuse[0], m.diffuse[1], m.diffuse[2]);
-				material->n = m.shininess;
-				tr->material = material;
+				std::string mtlGroupName = std::string(group->name);
+				int nMaterial = glmFindMaterial(model, (char*)mtlGroupName.c_str());
+				if (nMaterial)
+				{
+					GLMmaterial m = model->materials[nMaterial];
+					Material *material = new Material();
+					material->ka = m.ambient[0];
+					material->kd = m.diffuse[0];
+					material->ks = m.specular[0];
+					material->color = Color(m.diffuse[0], m.diffuse[1], m.diffuse[2]);
+					material->n = m.shininess;
+					tr->material = material;
+				}
 			}
 			triangles.push_back(tr);
 		}

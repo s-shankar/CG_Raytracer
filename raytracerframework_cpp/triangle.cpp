@@ -1,3 +1,5 @@
+#include <exception>
+#include <iostream>
 #include "triangle.h"
 #include "material.h"
 
@@ -43,9 +45,9 @@ void Triangle::changeBase(const Eigen::Matrix4d & changeOfBaseMatrix)
 
 Color Triangle::getColor(Point p)
 {
-	if (material == nullptr)
-		return Color(0.4, 0.4, 0.7);
-	return material->color;
+		if (material == nullptr)
+			return Color(0.4, 0.4, 0.7);
+		return material->color;
 }
 
 Triangle::~Triangle()

@@ -21,7 +21,7 @@ Camera:
     viewSize: [800,400]
 
 Shadows: true
-MaxRecursionDepth: 1
+MaxRecursionDepth: 2
 SuperSampling:
   factor: 1
 
@@ -33,20 +33,20 @@ Lights:
 
 Objects:
 - type: sphere
-  position: [90,320,100]
-  radius: 20
-  material: # blue
-    color: [0.0,0.0,1.0]
-    ka: 0.2
-    kd: 0.7
-    ks: 0.5
-    n: 64
-- type: OBJ
-  filename: Unit02.obj
-  position: [380,180,150]
-  scale: 10
+  position: [70,320,150]
+  radius: 50
   material: # red
     color: [1.0,0.0,0.0]
+    ka: 0.2
+    kd: 0.7
+    ks: 0.8
+    n: 32
+- type: OBJ
+  filename: teddy.obj
+  position: [380,110,150]
+  scale: 15
+  material: # blue
+    color: [0.5,0.2,0.1]
     ka: 0.2
     kd: 0.7
     ks: 0.8

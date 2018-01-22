@@ -161,7 +161,7 @@ Object* Raytracer::parseObject(const YAML::Node& node)
 		for (std::vector<Triangle*>::iterator it = mesh->triangles.begin(); it != mesh->triangles.end(); ++it)
 		{
 			//if ((*it)->material->color == NULL)
-				//(*it)->material = parseMaterial(node["material"]);
+			(*it)->material = parseMaterial(node["material"]);
 			scene->addObject((*it));
 		}
 		returnObject = mesh;
